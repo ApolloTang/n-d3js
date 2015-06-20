@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>??Title??</title>
+<script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+<style media="screen" type="text/css">
+    body { margin: 0; }
+    svg  { width: 500px; height: 500px;}
+</style>
+</head>
+<body>
+<script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+<script>
+var rainbow = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+var arc = d3.svg.arc()
+  .innerRadius(30)
+  // the outer radius of the rainbow is set from the index in the rainbow array
+
+  // note that is is drawn with the greatest outter radius first,
+  // smaller radius is stacked on top progressively,:w
+  .outerRadius(function(d, i){ return (rainbow.length - i) * 20 + 30})
+  .startAngle(-Math.PI / 2).endAngle(Math.PI / 2);
+
+d3.select('body').append('svg')
+    .selectAll('path').data(rainbow).enter().append('path')
+    .attr({
+      d: arc,
+      transform: 'translate(200, 200)',
+      fill: function(d){ return d }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>how d3.enter works</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+        <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+        <style media="screen" type="text/css">
+          ul {margin-top: 100px;}
+          li {
+            height: 10px;
+            background-color: gray;
+            border-bottom: 1px solid white;
+          }
+          li.bar{
+            height: 10px;
+            background-color: blue;
+          }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li></li>
+            <li></li>
+        </ul>
+        <script>
+            var data = [10, 30, 60, 80];
+            var d_select    = d3.select('ul');
+            var d_selectAll = d_select .selectAll('li');
+
+                    debugger;
+
+            var d_attr      = d_selectAll.attr('class', 'bar')
+
+                    console.log('d_attr[0].length: ', d_attr[0].length, '; d_attr: ', d_attr);     // 2
+                    for (i=0; i<d_attr[0].length; i++) {
+                        console.log("d_attr[0]["+i+"]: ", d_attr[0][i]);
+                    }
+                    debugger;
+
+
+            var d_data      = d_attr.data(data);
+
+
+                    console.log('d_data[0].length: ', d_data[0].length, '; d_data: ', d_data);     // 4
+                    for (i=0; i<d_data[0].length; i++) {
+                        console.log("d_data[0]["+i+"]: ", d_data[0][i]);
+                    }
+                    debugger;
+
+
+            var d_style = d_data.style('width', function(d){ return d + '%'; })
+
+
+                    console.log('d_style[0].length: ', d_style[0].length, '; d_style: ', d_style);     // 4
+                    for (i=0; i<d_style[0].length; i++) {
+                        if (d_style[0][i]) {
+                            console.log("d_style[0]["+i+"].attributes[1].value: ", d_style[0][i].attributes[1].value)
+                        } else {
+                            console.log('d_style[0]['+i+']:  undefine');
+                        }
+                    }
+                    debugger;
+
+
+            var d_enter = d_style.enter();
+            // after enter() is called, data are binded to the virture DOM; but not in the DOM
+
+                    console.log('d_enter[0].length: ', d_enter[0].length, '; d_enter: ', d_enter);     // 4
+                    for (i=0; i<d_enter[0].length; i++) {
+                        console.log("d_enter[0]["+i+"]: ", d_enter[0][i]); //
+                    }
+                    console.log("document.getElementsByTagName('li')): ", document.getElementsByTagName('li'));
+                    debugger;
+
+            var d_append = d_enter.append('li')
+            // By calling append() on enter(), viture elements with new data are inserted into dom.
+            // Note that the first 2 elements of d_append[0] is
+            // null because early on data has already bind to virture dom and insert into Dom.
+
+                    console.log('d_append[0].length: ', d_append[0].length, '; d_append: ', d_append);     // 4
+                    for (i=0; i<d_append[0].length; i++) {
+                        console.log("d_append[0]["+i+"]: ", d_append[0][i]); //
+                    }
+                    console.log("document.getElementsByTagName('li')): ",
+                                document.getElementsByTagName('li').length,  document.getElementsByTagName('li'))// [li.bar]
+                    console.log("document.getElementsByClassName('bar').length): ",
+                                document.getElementsByClassName('bar').length,  document.getElementsByClassName('bar')); // 1
+                    debugger;
+
+            var d_style2 = d_append.style('width', function(d){ return d + '%'; })
+
+                    console.log('d_style2[0].length: ', d_style2[0].length, '; d_style2: ', d_style2);     // 4
+                    for (i=0; i<d_style2[0].length; i++) {
+                        if (d_style2[0][i]) {
+                            console.log("d_style2[0]["+i+"].attributes[0].value: ", d_style2[0][i].attributes[0].value)
+                        } else {
+                            console.log('d_style2[0]['+i+']:  undefine');
+                        }
+                    }
+                    debugger;
+
+
+            d_style2.attr('class', 'bar');
+        </script>
+
+    </body>
+</html>

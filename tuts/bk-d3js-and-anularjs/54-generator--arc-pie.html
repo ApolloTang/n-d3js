@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>??Title??</title>
+<script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+<style media="screen" type="text/css">
+    body{ margin: 0; }
+    path { stroke: white; stroke-width: 2px;}
+    svg  { width: 500px; height: 500px;}
+</style>
+</head>
+<body>
+<script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+<script>
+// the arc generator
+var arc = d3.svg.arc()
+  .innerRadius(100)
+  .outerRadius(150);
+
+var data = [21, 32, 35, 64, 83];
+
+var color = d3.scale.category10();
+
+var pie = d3.layout.pie();
+// layout.pie handles converting our data to a format we can
+// pass directly to the pie generator.
+
+var arcData = pie(data);
+
+d3.select('body').append('svg')
+  .append('g').attr('transform', 'translate(200, 175)')
+    .selectAll('path').data(arcData).enter()
+      .append('path').attr('d', arc).style('fill', function(d, i){
+        return color(i);
+      });
+
+
+
+// [note] no need to specify the follwoing code for
+// the startAngle and endAngle
+/*
+
+ // default `startAngle` accessor
+ arc.startAngle(function(d){ return d.startAngle; });
+
+ // default `endAngle` accessor
+ arc.endAngle(function(d){ return d.endAngle; });
+
+*/
+</script>
+</body>
+</html>

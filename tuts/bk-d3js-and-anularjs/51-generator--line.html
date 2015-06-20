@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>??Title??</title>
+<script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+<style media="screen" type="text/css">
+    body { margin: 0; }
+    path { stroke: black; stroke-width: 2px; fill: none;}
+    svg  { width: 500px; height: 500px;}
+</style>
+</head>
+<body>
+<script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+<script>
+var interpolateMode;
+interpolateMode= 'step';
+interpolateMode= 'bundle';
+interpolateMode= 'monotone';
+interpolateMode= 'cardinal';
+interpolateMode= 'cardinal-closed';
+var lineGenerator = d3.svg.line().interpolate(interpolateMode)
+    .x(function(d) { return d[0]; })
+    .y(function(d) { return d[1]; });
+
+// the line data
+    var lineData = [[154, 14], [35, 172], [251, 127], [31, 58], [157, 205], [154, 14]];
+
+// create `<svg>` and inner `<path>` element
+
+    d3.select('body').append('svg')
+    // use the generator and line data to create the `d` attribute for our path.
+    .append('path').datum(lineData).attr('d', lineGenerator);
+
+</script>
+</body>
+</html>
