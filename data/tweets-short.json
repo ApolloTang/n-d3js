@@ -1,0 +1,27 @@
+{
+    "tweets": [{
+        "user": "Al",
+        "content": "I really love seafood.",
+        "timestamp": " Mon Dec 23 2013 21:30 GMT-0800 (PST)",
+        "retweets": ["Raj", "Pris", "Roy"],
+        "favorites": ["Sam"]
+    }, {
+        "user": "Al",
+        "content": "I take that back, this doesn't taste so good.",
+        "timestamp": "Mon Dec 23 2013 21:55 GMT-0800 (PST)",
+        "retweets": ["Roy"],
+        "favorites": []
+    }, {
+        "user": "Roy",
+        "content": "Great workout!",
+        "timestamp": " Mon Dec 23 2013 7:20 GMT-0800 (PST)",
+        "retweets": [],
+        "favorites": []
+    }, {
+        "user": "Roy",
+        "content": "Spectacular oatmeal!",
+        "timestamp": " Mon Dec 23 2013 7:23 GMT-0800 (PST)",
+        "retweets": [],
+        "favorites": []
+    }]
+}
