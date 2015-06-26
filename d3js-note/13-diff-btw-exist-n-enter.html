@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>d3 lab</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        svg {
+            height: 500px;
+            width: 500px;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HTML HERE -->
+
+    <svg id="svg1" style="border:1px lightgray solid;"></svg>
+    <svg id="svg2" style="border:1px lightgray solid;"></svg>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script>
+
+            var p1 = d3.select("#svg1")
+                .selectAll("g")
+                .data([[100,100],[200,200],[300,300],[400,400]])
+                .enter()
+
+
+                    console.log('p1: ', p1);
+                    d3.select("#svg1").selectAll('g').each(function(d){console.log(' ', d)});
+                    console.log(' . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .')
+                    debugger;
+
+                p1.append("g")
+                .attr("transform", function(d) { return "translate(" + d[0] + "," + d[1] +  ")" })
+                .append("text").text(function(d) { return d })
+
+            var p2 = d3.select("#svg2")
+                .selectAll("g")
+                .data([[100,100],[200,200],[300,300],[400,400]])
+
+                .enter()
+                .append("g")
+                .attr("transform", function(d) { return "translate(" + d[0] + "," + d[1] +  ")" })
+                .append("text").text(function(d) { return d })
+
+
+
+                    console.log('.. now we enter/exit with new data' )
+            var q1 = d3.select("#svg1").selectAll('g')
+                .data([1,2])
+                .enter()
+
+            var q2 = d3.select("#svg2").selectAll('g')
+                .data([1,2])
+                .exit()
+
+
+                    console.log('q1: ', q1);
+                    console.log('q2: ', q2);
+                    var a1 = d3.select("#svg1").selectAll('g').each(function(d){console.log('a1 ', d)});
+                    var a2 = d3.select("#svg2").selectAll('g').each(function(d){console.log('a2 ', d)});
+                    console.log(' . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .')
+                    debugger;
+
+                    console.log('.. now we append/remove' )
+
+           q1.append('g');
+           q2.remove('g');
+                    console.log('q1: ', q1);
+                    console.log('q2: ', q2);
+                    //q1.each(function(d){console.log('q1 ',d)});
+                    //q2.each(function(d){console.log('q2 ',d)});
+                    var b1 = d3.select("#svg1").selectAll('g').each(function(d){console.log('b1 ', d)});
+                    var b2 = d3.select("#svg2").selectAll('g').each(function(d){console.log('b2 ', d)});
+                    console.log('_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ')
+                    debugger;
+
+            var r1 = d3.select('#svg1').selectAll('text').text(function(d){return d});
+            var r2 = d3.select('#svg2').selectAll('text').text(function(d){return d});
+
+                    console.log('r1: ', r1);
+                    console.log('r2: ', r2);
+                    //q1.each(function(d){console.log('q1 ',d)});
+                    //q2.each(function(d){console.log('q2 ',d)});
+                    var c1 = d3.select("#svg1").selectAll('g').each(function(d){console.log('c1 ', d)});
+                    var c1t = d3.select("#svg1").selectAll('text').each(function(d){console.log('c1t ', d)});
+                    var c2 = d3.select("#svg2").selectAll('g').each(function(d){console.log('c2 ', d)});
+                    var c2t = d3.select("#svg2").selectAll('text').each(function(d){console.log('c2t ', d)});
+                    console.log('_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ')
+                    debugger;
+    </script>
+</body>
+
+</html>
