@@ -80,6 +80,11 @@
             teamG
                 .on("mouseover", highlightRegion);
 
+            teamG
+                .on("mouseout", function() {
+                    d3.selectAll("g.overallG").select("circle").style("fill", "pink");
+                });
+
             var dataKeys = d3.keys(incomingData[0])
                 .filter(function(el) {
                     return el != "team" && el != "region"
