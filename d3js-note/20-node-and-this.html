@@ -30,7 +30,6 @@
 
     <script>
         d3.csv("../data/worldcup.csv", function(data) {
-            console.log(JSON.stringify(data));
             overallTeamViz(data);
         })
 
@@ -66,6 +65,9 @@
                 // 1-7, false
             })
 
+            console.log(' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ')
+            var length = d3.select('circle')[0].length;
+            console.log(length, d3.select('circle')[0][0] == d3.select('circle').node() ) // 1, true
         }
     </script>
 </footer>
