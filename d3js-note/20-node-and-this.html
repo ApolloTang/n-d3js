@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <title>node, and this</title>
+    <meta charset="utf-8" />
+    <script src="../lib/d3.v3.min.js" type="text/JavaScript"></script>
+</head>
+<style>
+    svg {
+        height: 500px;
+        width: 500px;
+        border: 1px solid gray;
+    }
+    circle {
+        fill: pink;
+        stroke: black;
+        stroke-width: 1px;
+    }
+</style>
+
+<body>
+
+    <div id="viz">
+        <svg>
+        </svg>
+    </div>
+    <div id="controls" />
+</body>
+<footer>
+
+    <script>
+        d3.csv("../data/worldcup.csv", function(data) {
+            console.log(JSON.stringify(data));
+            overallTeamViz(data);
+        })
+
+        function overallTeamViz(incomingData) {
+            d3.select("svg")
+                .append("g")
+                .classed("collection", true)
+                .attr("transform", "translate(50,300)")
+                .selectAll("g")
+                .data(incomingData)
+                .enter()
+                .append("g")
+                .classed("item", true)
+                .attr("transform", function(d, i) {
+                    return "translate(" + (i * 50) + ", 0)"
+                });
+
+            var teamG = d3.selectAll("g.item");
+
+            teamG.append("circle").attr("r", 0).attr("r", 20);
+
+            teamG
+                .append("text")
+                .style("text-anchor", "middle").attr("y", 30)
+                .style("font-size", "10px")
+                .text(function(d) {
+                    return d.team
+                });
+
+            d3.selectAll('circle').each(function(d, i) {
+                console.log(i, this == d3.select('circle').node());
+                // 0, true
+                // 1-7, false
+            })
+
+        }
+    </script>
+</footer>
+
+</html>
