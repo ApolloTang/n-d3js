@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <title>node, and this</title>
+    <meta charset="utf-8" />
+    <script src="../lib/d3.v3.min.js" type="text/JavaScript"></script>
+</head>
+<style>
+    svg {
+        height: 100px;
+        width: 500px;
+        border: 1px solid gray;
+    }
+    circle {
+        fill: pink;
+        stroke: black;
+        stroke-width: 1px;
+    }
+</style>
+
+<body>
+
+    <div id="viz">
+        <svg id="svgA"> </svg>
+        <svg id="svgB"> </svg>
+    </div>
+    <div id="controls" />
+</body>
+<footer>
+
+    <script>
+        d3.csv("../data/worldcup.csv", function(data) {
+            overallTeamViz(data);
+        })
+
+        function overallTeamViz(incomingData) {
+            d3.selectAll("svg")
+                .append("g")
+                .classed("collection", true)
+                .attr("transform", "translate(50,50)")
+                .selectAll("g")
+                .data(incomingData)
+                .enter()
+                .append("g")
+                .classed("item", true)
+                .attr("transform", function(d, i) {
+                    return "translate(" + (i * 50) + ", 0)"
+                });
+
+            var selectSetA = d3.select('#svgA g.collection').selectAll("g.item");
+            var selectSetB = d3.select('#svgB g.collection').selectAll("g.item");
+            selectSetA.append("circle").attr("r", 0).attr("r", 20);
+            selectSetB.append("circle").attr("r", 0).attr("r", 20);
+
+            selectSetA.on("mouseover", overA);
+            selectSetB.on("mouseover", overB);
+
+            function overA(d, i) {
+                var that = this;
+                console.log(that); // that == that .teamG which is being mouseovered
+
+                selectSetA.each(function(p, j) {
+                    console.log(i,j, that == this);  // loop over all .teamG, this == current .teamG in the loop
+
+                    // [!!!]  use this and that for predicate
+                    this == that
+                        ? d3.select(this).select("circle").style('fill', 'red')
+                        : d3.select(this).select("circle").style('fill', 'gray');
+                });
+            }
+
+            function overB(d, i) {
+                var that = this;
+                console.log(that); // that == that .teamG which is being mouseovered
+
+                selectSetB.select("circle").style("fill", function(p,j) {
+                    console.log(i,j, that == this); // loop over all <circle>, this === current <circle> in the loop
+
+                    // [!!!]  CAN NOT use this and that for predicate
+                    return i == j ? "red" : "gray"
+                })
+
+            }
+
+        }
+    </script>
+</footer>
+
+</html>
