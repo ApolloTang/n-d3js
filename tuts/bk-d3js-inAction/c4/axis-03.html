@@ -13,8 +13,12 @@
         border: 1px solid gray;
     }
     line {
-      shape-rendering: crispEdges;
-      stroke: #000;
+        shape-rendering: crispEdges;
+        stroke: #000;
+    }
+    path.domain {
+        fill: none;
+        stroke: black;
     }
 </style>
 
@@ -51,21 +55,20 @@
 
         var xExtent = d3.extent(scatterData, function(d) { return d.salary });
         var yExtent = d3.extent(scatterData, function(d) { return d.friends });
-        var xScale = d3.scale.linear().domain([0, xExtent[1]]).range([0, 500]);
-        var yScale = d3.scale.linear().domain([0, yExtent[1]]).range([0, 500]);
-
-
-        yAxis = d3.svg.axis()
-            .scale(yScale)
-            .orient("left")
-            .ticks(10).tickSize(150);
-        d3.select("svg").append("g").attr("id", "yAxisG").call(yAxis);
+        var xScale = d3.scale.linear().domain([0, xExtent[1]]).range([0, 480]);
+        var yScale = d3.scale.linear().domain([0, yExtent[1]]).range([0, 480]);
 
         xAxis = d3.svg.axis()
             .scale(xScale)
             .orient("bottom")
-            .ticks(5).tickSize(50);
+            .ticks(4).tickSize(480);
         d3.select("svg").append("g").attr("id", "xAxisG").call(xAxis);
+
+        yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("right")
+            .ticks(16).tickSize(480);
+        d3.select("svg").append("g").attr("id", "yAxisG").call(yAxis);
 
         d3.select("svg")
             .selectAll("circle")
@@ -77,21 +80,21 @@
             .attr("cy", function(d) { return yScale(d.friends)});
 
 
-            // playing with YAxis path.domain
+        // playing with YAxis path.domain
         d3.selectAll("#YAxisG path.domain")
-            .style("fill", "yellow")
-            .style("stroke", "blue")
-            .style('stroke-width', '1')
+            // .style("fill", "yellow")
+            // .style("stroke", "blue")
+            // .style('stroke-width', '4')
             // .attr('d',"M0,3H50V500H0");
 
-        d3.selectAll("#XAxisG path.domain")
-            .style("fill", "none")
-            .style("stroke", "red")
-            .style('stroke-width', '4')
+        // d3.selectAll("#XAxisG path.domain")
+        //     .style("fill", "yellow")
+        //     .style("stroke", "red")
+        //     .style('stroke-width', '4')
             // .attr('d',"M0,3H50V500H0");
 
-        d3.selectAll("#xAxisG").attr("transform","translate(0,200)");
-        d3.selectAll("#yAxisG").attr("transform","translate(200,0)");
+        // d3.selectAll("#xAxisG").attr("transform","translate(0,200)");
+        // d3.selectAll("#yAxisG").attr("transform","translate(100,0)");
     </script>
 </footer>
 
