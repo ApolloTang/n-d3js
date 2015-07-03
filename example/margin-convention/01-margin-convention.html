@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    * {
+        margin:0; padding:0;
+    }
+    svg {
+        outline: 1px solid red;
+    }
+</style>
+
+<body>
+    <div id="content"></div>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+
+    <script>
+        var margin = {
+                top: 30,
+                right: 20,
+                bottom: 30,
+                left: 20
+            },
+            svgDim = { w:500, h:500 },
+            width = svgDim.w - margin.left - margin.right,
+            height = svgDim.h - margin.top - margin.bottom;
+
+            var svg = d3.select("#content").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g").attr('id', 'chart-area')
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                var graphArea = d3.select('#chart-area')
+                    .append('rect')
+                    .attr('width', width).attr('height', height).style('fill', '#eeeeee');
+
+    </script>
+</body>
