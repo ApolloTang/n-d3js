@@ -6,7 +6,7 @@
 
 
 var w = 200
-var h = 200
+var h = 500
 
 
 function bars(data) {
@@ -23,7 +23,7 @@ function bars(data) {
         .domain(d3.range(data.length))
         .rangeBands([0, h], .2)
 
-
+        console.log( y.rangeBand() );
     var vis = d3.select("#barchart")
 
     //a good written tutorial of d3 selections coming from protovis
@@ -60,6 +60,7 @@ function bars(data) {
         .ease("quad")
         .attr("width", x)
         .attr("height", y.rangeBand())
+        .each(function(d){console.log(d)})
         .attr("transform", function(d, i) {
             return "translate(" + [0, y(i)] + ")"
         })
@@ -72,7 +73,7 @@ function init() {
     //setup the svg
     var svg = d3.select("#svg")
         .attr("width", w + 100)
-        .attr("height", h + 100)
+        .attr("height", h)
     svg.append("svg:rect")
         .attr("width", "100%")
         .attr("height", "100%")
@@ -81,7 +82,7 @@ function init() {
 
     svg.append("svg:g")
         .attr("id", "barchart")
-        .attr("transform", "translate(50,50)")
+        .attr("transform", "translate(50,0)")
 
     //setup our ui
     d3.select("#data1")
@@ -104,11 +105,11 @@ function init() {
 }
 
 var data1 = [
-    5,
+    10,
     20,
-    55,
-    60,
-    89
+    30,
+    40,
+    50
 ]
 
 var data2 = [
