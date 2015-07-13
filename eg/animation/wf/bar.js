@@ -5,8 +5,8 @@
 //http://mbostock.github.com/d3/tutorial/bar-1.html
 
 
-var w = 400
-var h = 400
+var w = 200
+var h = 200
 
 
 function bars(data) {
@@ -77,7 +77,7 @@ function init() {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("stroke", "#000")
-        .attr("fill", "none")
+        .attr("fill", "lavender")
 
     svg.append("svg:g")
         .attr("id", "barchart")
@@ -100,7 +100,7 @@ function init() {
 
 
     //make the bars
-    bars(data1)
+    // bars(data2)
 }
 
 var data1 = [
