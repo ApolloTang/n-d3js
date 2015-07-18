@@ -40,7 +40,9 @@
         d3.csv("../../data/movies.csv", areaChart)
 
         function areaChart(data) {
+            // data [{day:1, movie1:20, movie2:40, ....},{} ...]
 
+            console.log(data)
             xScale = d3.scale.linear().domain([1, 10.5]).range([20, 480]);
             yScale = d3.scale.linear().domain([0, 50]).range([480, 20]);
 
@@ -66,12 +68,11 @@
                 .range(["lightgray", "black"]);
 
             var n = 0;
-            // for (x in data[0]) {
+            // for (x in data[0]) {  // m in data[m] can day row because we just need to put key name in 'x'
                 x = "movie2";
                 if (x != "day") {
                     movieArea = d3.svg.area()
                         .x(function(d) {
-                            console.log(d)
                             return xScale(d.day)
                         })
                         .y(function(d) {
@@ -79,10 +80,11 @@
                             return yScale(t)
                         })
                         .y0(function(d) {
+                            // d = { movie1:20, movie2:40, ....}
                             var t = simpleStacking(d, x)
-                            var d = d[x];
-                            var diff = t - d;
-                                console.log(t, d, diff);
+                            var y = d[x];
+                            var diff = t - y;
+                                // console.log(t, y, diff);
                             return yScale(diff);
                         })
                         .interpolate("basis")
