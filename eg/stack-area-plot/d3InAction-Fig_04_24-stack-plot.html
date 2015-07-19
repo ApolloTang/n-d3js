@@ -1,0 +1,119 @@
+<html>
+
+<head>
+    <title>D3 in Action Chapter 4 - Example 14</title>
+    <meta charset="utf-8" />
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js" type="text/JavaScript"></script>
+    <script src="http://localhost:8001/js/lib/colorbrewer.js" type="text/JavaScript"></script>
+</head>
+<style>
+    svg {
+        height: 500px;
+        width: 500px;
+        border: 1px solid gray;
+    }
+    line {
+        shape-rendering: crispEdges;
+        stroke: #000000;
+    }
+    line.minor {
+        stroke: #777777;
+        stroke-dasharray: 2, 2;
+    }
+    path.domain {
+        fill: none;
+        stroke: black;
+    }
+</style>
+
+<body>
+
+    <div id="viz">
+        <svg>
+        </svg>
+    </div>
+    <div id="controls" />
+</body>
+<footer>
+
+    <script>
+        moviesTimeSeries = [
+            {"day":"1",  "movie1":"20", "movie2":"8", "movie3":"3", "movie4":"0",  "movie5":"0",  "movie6":"0"},
+            {"day":"2",  "movie1":"18", "movie2":"5", "movie3":"1", "movie4":"13", "movie5":"0",  "movie6":"0"},
+            {"day":"3",  "movie1":"14", "movie2":"3", "movie3":"1", "movie4":"10", "movie5":"0",  "movie6":"0"},
+            {"day":"4",  "movie1":"7",  "movie2":"3", "movie3":"0", "movie4":"5",  "movie5":"27", "movie6":"15"},
+            {"day":"5",  "movie1":"4",  "movie2":"3", "movie3":"0", "movie4":"2",  "movie5":"20", "movie6":"14"},
+            {"day":"6",  "movie1":"3",  "movie2":"1", "movie3":"0", "movie4":"0",  "movie5":"10", "movie6":"13"},
+            {"day":"7",  "movie1":"2",  "movie2":"0", "movie3":"0", "movie4":"0",  "movie5":"8",  "movie6":"12"},
+            {"day":"8",  "movie1":"0",  "movie2":"0", "movie3":"0", "movie4":"0",  "movie5":"6",  "movie6":"11"},
+            {"day":"9",  "movie1":"0",  "movie2":"0", "movie3":"0", "movie4":"0",  "movie5":"3",  "movie6":"9"},
+            {"day":"10", "movie1":"0",  "movie2":"0", "movie3":"0", "movie4":"0",  "movie5":"1",  "movie6":"8"}
+        ];
+
+        // In this eg, all scale are define manually, no automatic scale
+        var xScale = d3.scale.linear().domain([1, 10.5]).range([20, 480]);
+        var yScale = d3.scale.linear().domain([0, 50]).range([480, 20]);
+        var fillScale = d3.scale.linear().domain([0, 5]).range(["lightgray", "black"]);
+
+        areaChart(moviesTimeSeries);
+        plotAxises();
+
+        function areaChart(moviesTimeSeries) {
+            var movieNames = [];
+            for (var key in moviesTimeSeries[0]) {
+                if ( key !== 'day') movieNames.push(key);
+            }
+            // movies = ["movie1", "movie2", "movie3", "movie4", "movie5", "movie6"]
+
+            var fillColorIndex = 0;
+
+            movieNames.forEach(function(movieName){
+                plotMovieArea( moviesTimeSeries, movieName );
+            });
+            // plotMovieArea( moviesTimeSeries, 'movie2' );
+
+            function plotMovieArea( moviesTimeSeries, currentMovie ){
+                var movieArea = d3.select("svg")
+                    .append("path")
+                    .style( "id", currentMovie + "Area")
+                    .attr(  "d", generateAreaPath( moviesTimeSeries, currentMovie)  )
+                    .attr(  "fill", fillScale(fillColorIndex) )
+                    .attr(  "stroke", "none")
+
+                fillColorIndex++;
+
+                function generateAreaPath( timeSeriesData, item) {
+                    var path = d3.svg.area()
+                        .x(function(d) { return xScale(d.day) })
+                        .y(function(d) { return yScale(simpleStacking(d, item)) })
+                        .y0(function(d){ return yScale(simpleStacking(d, item) - d[item]); })
+                        .interpolate("basis");
+
+                    return path(timeSeriesData);
+                }
+
+                function simpleStacking(data, currentItem) {
+                    // eg of data:
+                    // {"day":"1",  "movie1":"20", "movie2":"8", "movie3":"3", "movie4":"0",  "movie5":"0",  "movie6":"0"}
+                    var newHeight = 0;
+                    for (var key in data) {
+                        if ( key !== 'day') {
+                            newHeight += parseInt(data[key]);
+                            if (key == currentItem) { break; }
+                        }
+                    }
+                    return newHeight;
+                }
+            }
+        }
+
+        function plotAxises() {
+            var xAxis = d3.svg.axis() .scale(xScale).orient("bottom").tickSize(480).tickValues([1,2,3,4,5,6,7,8,9,10]);
+            var yAxis = d3.svg.axis() .scale(yScale).orient("right").ticks(10).tickSize(480).tickSubdivide(true);
+            d3.select("svg").append("g").attr("id", "xAxisG").call(xAxis);
+            d3.select("svg").append("g").attr("id", "yAxisG").call(yAxis);
+        }
+    </script>
+</footer>
+
+</html>
