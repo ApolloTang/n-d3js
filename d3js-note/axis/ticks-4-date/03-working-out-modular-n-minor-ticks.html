@@ -50,7 +50,7 @@
 
         // parameters
             var start = new Date("01-Jun-15");
-            var end = new Date("11-Jul-15");
+            var end = new Date("04-Jun-15");
 
             var minorTickIntervalInHour = 12;
             var numberOfTicksWDate = 15; // this is an approximate number
@@ -70,7 +70,7 @@
             var n = howManyDays_btw_startEndDate; // which is the number of data points
 
         // adjustment for edge cases
-            var dataPointsToSkipLabel = ( n <= numberOfTicksWDate ) ? 0 : parseInt(n/numberOfTicksWDate);
+            var numOfDataPointsToSkipLabel = ( n <= numberOfTicksWDate ) ? 0 : parseInt(n/numberOfTicksWDate);
             var numberOfTicks = (n === 1) ? n : n-1; // a hack to take care of case when n is unity
 
             console.log('start: ', start)
@@ -78,7 +78,7 @@
             console.log('n:     ', n)
             console.log('domain[0]:', timeScale.domain()[0]);
             console.log('domain[1]:', timeScale.domain()[1]);
-            console.log('dataPointsToSkipLabel: ', dataPointsToSkipLabel )
+            console.log('numOfDataPointsToSkipLabel: ', numOfDataPointsToSkipLabel )
             console.log('minorTickIntervalInHour: ', minorTickIntervalInHour  )
 
         // major ticks
@@ -89,7 +89,7 @@
                     .ticks( numberOfTicks )
                 .tickSize(20, 0)
                 .tickFormat(function(d, index) {
-                    var mod = index % (dataPointsToSkipLabel + 1);
+                    var mod = index % (numOfDataPointsToSkipLabel + 1);
                     if (mod === 0) {
                         var out = d3.time.format('%b %d')(d);
                         // console.log(d, out)
@@ -136,12 +136,12 @@
             xaxisg.selectAll(".tick line")
                 .classed('tick-w-label',
                     function(d, index) {
-                        var mod = (index) % (dataPointsToSkipLabel + 1);
+                        var mod = (index) % (numOfDataPointsToSkipLabel + 1);
                         if (mod === 0) { return d; }
                     })
                     .attr('y2', function(d,index){
                         // console.log('attr for y2: ', d)
-                        var mod = (index) % (dataPointsToSkipLabel + 1);
+                        var mod = (index) % (numOfDataPointsToSkipLabel + 1);
                         if (mod !== 0) {
                             return 15;
                         } else {
