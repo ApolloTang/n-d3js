@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    .axis text {
+        font: 10px sans-serif;
+    }
+    .axis path {
+        fill: none;
+        stroke: #000;
+        stroke-width: 2.5px;
+        shape-rendering: crispEdges;
+    }
+    .axis line {
+        fill: none;
+        stroke: green;
+        stroke-width: 1.6px;
+    }
+    .axis .minor {
+        stroke: red;
+        stroke-width: 0.4px;
+    }
+</style>
+
+<body>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script src="http://localhost:8001/js/lib/moment-v2.10.3.js"></script>
+
+    <script>
+        var margin = {
+                top: 100,
+                right: 100,
+                bottom: 100,
+                left: 100
+            },
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+        var start = new Date("01-Jun-15");
+        var end = new Date("10-Jun-15");
+
+        var M_start = moment(start);
+        var M_end = moment(end);
+
+        var howManyDays_btw_startEndDate = M_end.diff(M_start, 'days') + 1; // include end point
+
+        console.log(start)
+        console.log(end)
+        console.log(howManyDays_btw_startEndDate)
+
+        var x = d3.time.scale()
+            .domain([start, end])
+            // .domain([new Date, new Date])
+            // .nice(d3.time.week)
+            .range([0, width]);
+
+        console.log(x.domain());
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var xaxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .ticks(howManyDays_btw_startEndDate)
+            .tickSize(10, 0)
+            .tickFormat(function(d) {
+                var mod = arguments[1] % 2
+                // console.log(arguments[1] , mod, arguments);
+                if (mod === 0) {
+                    var out = d3.time.format('%b %d')(d);
+                //     console.log(d, out)
+                }
+                    return  out;
+            });
+
+        var xaxisg = svg.append("g")
+            .attr("class", "x axis")
+            .call(xaxis);
+        console.log('- - - - - - - - - - - - - - - - - - - - - - - -' )
+        xaxisg.selectAll("line")
+            .data(x.ticks(howManyDays_btw_startEndDate), function(d) {
+                console.log(arguments)
+                return d;
+            })
+            .enter()
+            .append("line")
+            .attr("class", "minor")
+            .attr("y1", 0)
+            .attr("y2", 10)
+            .attr("x1", x)
+            .attr("x2", x);
+    </script>
+</body>

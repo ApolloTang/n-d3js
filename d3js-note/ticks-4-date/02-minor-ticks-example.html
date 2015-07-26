@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    .axis text {
+        font: 10px sans-serif;
+    }
+    .axis path {
+        fill: none;
+        stroke: #000;
+        stroke-width: 2.5px;
+        shape-rendering: crispEdges;
+    }
+    .axis line {
+        fill: none;
+        stroke: green;
+        stroke-width: 1.6px;
+    }
+    .axis .minor {
+        stroke: red;
+        stroke-width: 0.4px;
+    }
+</style>
+
+<body>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script>
+        var margin = {
+                top: 100,
+                right: 100,
+                bottom: 100,
+                left: 100
+            },
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+        var x = d3.time.scale()
+            .domain([new Date, new Date])
+            .nice(d3.time.week)
+            .range([0, width]);
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var xaxis = d3.svg.axis().scale(x).orient("bottom").ticks(16).tickSize(-60, 0);
+        var xaxisg = svg.append("g")
+            .attr("class", "x axis")
+            .call(xaxis);
+        xaxisg.selectAll("line").data(x.ticks(64), function(d) {
+                return d;
+            })
+            .enter()
+            .append("line")
+            .attr("class", "minor")
+            .attr("y1", 0)
+            .attr("y2", -60)
+            .attr("x1", x)
+            .attr("x2", x);
+    </script>
+</body>
