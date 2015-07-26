@@ -50,15 +50,17 @@
 
         // setting up scale
             var start = new Date("01-Jun-15");
-            var end = new Date("05-Aug-15");
+            var end = new Date("29-Jun-15");
 
-            var dataPointsToSkipLabel = 6;
-            var minorTickIntervalInHour = 12;
 
             var M_start = moment(start);
             var M_end = moment(end);
             var howManyDays_btw_startEndDate = M_end.diff(M_start, 'days') + 1; // include end point
             var n = howManyDays_btw_startEndDate;
+            var numberOfTicksWDate = 15; // this is a approximate number
+
+            var dataPointsToSkipLabel = ( n <= numberOfTicksWDate ) ? 0 : parseInt(n/numberOfTicksWDate);
+            var minorTickIntervalInHour = 12;
 
             var timeScale = d3.time.scale()
                 .domain([start, end])
@@ -77,16 +79,17 @@
 
         // major ticks
 
+            var ticksAdjusted = n === 1  ? n : n-1; // a hack to take care of case when n is unity
             var xaxis = d3.svg.axis()
                 .scale(timeScale)
-                .orient("bottom")
-                .ticks(howManyDays_btw_startEndDate)
+                    .orient("bottom")
+                    .ticks( ticksAdjusted )
                 .tickSize(30, 0)
                 .tickFormat(function(d, index) {
                     var mod = index % (dataPointsToSkipLabel + 1);
                     if (mod === 0) {
                         var out = d3.time.format('%b %d')(d);
-                        // console.log(d, out)
+                        console.log(d, out)
                     }
                     return  out;
                 });
