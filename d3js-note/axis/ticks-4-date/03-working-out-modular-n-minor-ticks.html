@@ -23,7 +23,7 @@
     .axis .tick-w-label {
         fill: none;
         stroke: blue;
-        stroke-width: 3px;
+        stroke-width: 1px;
     }
 </style>
 
@@ -48,26 +48,30 @@
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // setting up scale
+        // parameters
             var start = new Date("01-Jun-15");
-            var end = new Date("29-Jun-15");
+            var end = new Date("11-Jul-15");
+
+            var minorTickIntervalInHour = 12;
+            var numberOfTicksWDate = 15; // this is an approximate number
 
 
+        // setting up scale
             var M_start = moment(start);
             var M_end = moment(end);
-            var howManyDays_btw_startEndDate = M_end.diff(M_start, 'days') + 1; // include end point
-            var n = howManyDays_btw_startEndDate;
-            var numberOfTicksWDate = 15; // this is a approximate number
-
-            var dataPointsToSkipLabel = ( n <= numberOfTicksWDate ) ? 0 : parseInt(n/numberOfTicksWDate);
-            var minorTickIntervalInHour = 12;
 
             var timeScale = d3.time.scale()
                 .domain([start, end])
                 // .nice(d3.time.week) // <-- optional
                 .range([0, width]);
-
             window.ts = timeScale;
+
+            var howManyDays_btw_startEndDate = M_end.diff(M_start, 'days') + 1; // include end point
+            var n = howManyDays_btw_startEndDate; // which is the number of data points
+
+        // adjustment for edge cases
+            var dataPointsToSkipLabel = ( n <= numberOfTicksWDate ) ? 0 : parseInt(n/numberOfTicksWDate);
+            var numberOfTicks = (n === 1) ? n : n-1; // a hack to take care of case when n is unity
 
             console.log('start: ', start)
             console.log('end:   ', end)
@@ -79,17 +83,16 @@
 
         // major ticks
 
-            var ticksAdjusted = n === 1  ? n : n-1; // a hack to take care of case when n is unity
             var xaxis = d3.svg.axis()
                 .scale(timeScale)
                     .orient("bottom")
-                    .ticks( ticksAdjusted )
-                .tickSize(30, 0)
+                    .ticks( numberOfTicks )
+                .tickSize(20, 0)
                 .tickFormat(function(d, index) {
                     var mod = index % (dataPointsToSkipLabel + 1);
                     if (mod === 0) {
                         var out = d3.time.format('%b %d')(d);
-                        console.log(d, out)
+                        // console.log(d, out)
                     }
                     return  out;
                 });
@@ -116,7 +119,7 @@
                 .append("line")
                 .attr("class", "minor")
                 .attr("y1", 0)
-                .attr("y2", 20)
+                .attr("y2", 10)
                 .attr("x1", function(d) {
                     // console.log('x1: ', d);
                     return timeScale(d)
@@ -136,7 +139,15 @@
                         var mod = (index) % (dataPointsToSkipLabel + 1);
                         if (mod === 0) { return d; }
                     })
-                // statement to change x2 to shorten line lenght here
+                    .attr('y2', function(d,index){
+                        // console.log('attr for y2: ', d)
+                        var mod = (index) % (dataPointsToSkipLabel + 1);
+                        if (mod !== 0) {
+                            return 15;
+                        } else {
+                            return 20;
+                        }
+                    })
 
     </script>
 </body>
