@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>sartun</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        /* css here */
+    </style>
+</head>
+
+<body>
+
+    <!-- HTML HERE -->
+
+    <svg id="svg" style="width:300px; height:300px; border:1px lightgray solid;"></svg>
+    <canvas id="canvas" width="300" height="300" style="border:1px lightgray solid;"></canvas>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script>
+
+        var data = ["Monday", "Tuesday", "Wednesday"]
+        var s1 = d3.scale.ordinal()
+            .domain(data)
+            .rangeBands([100, 400], 1)
+        console.log('domain: ', s1.domain());       // ["Monday", "Tuesday", "Wednesday"]
+        console.log('range: ', s1.range());         // [175, 250, 325]
+        console.log('rangeBand: ', s1.rangeBand()); // 0
+
+        /*
+
+             |              x              x              x              |
+            100  125  150  175  200  225  250  275  300  325  350  375  400
+
+        */
+
+        console.log('- - - - - - - - - - - - - - - - - -');
+        data = ["Monday", "Tuesday", "Wednesday"]
+        var bandEnd = []
+        var bandCenter = []
+        var s2 = d3.scale.ordinal()
+            .domain(data)
+            .rangeRoundBands([1000, 4000], .5)
+        _.forEach(s2.range(), function(d){ bandEnd.push(d+s2.rangeBand()) })
+        _.forEach(s2.range(), function(d){ bandCenter.push(d+s2.rangeBand()/2) })
+
+        console.log('domain:     ', s2.domain());       // ["Monday", "Tuesday", "Wednesday"]
+        console.log('BandWidth:  ', s2.rangeBand());    // 429
+        console.log('BandStart:  ', s2.range());        // [1429,   2286,   3143]
+        console.log('bandCenter: ', bandCenter);        // [1643.5, 2500.5, 3357.5]
+        console.log('bandEnd:    ', bandEnd);           // [1858,   2715,   3572]
+
+        /*
+
+          |            ------xx-----           -------xx------           -----xx-----              |
+          .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . .
+  (x10)  100   120   140   160   180   200   220   240   260   280   300   320   340   360   380  400
+
+        */
+
+        console.log('- - - - - - - - - - - - - - - - - -');
+        var s3 = d3.scale.ordinal()
+            .domain(data)
+            .rangePoints([100, 300])
+        console.log('domain: ', s3.domain()); //0
+        console.log('range: ', s3.range()); //0
+        console.log('rangeBand: ', s3.rangeBand()); //0
+
+
+        /*
+             x                   x                   x
+            100  125  150  175  200  225  250  275  300
+
+        */
+
+
+    </script>
+</body>
+
+</html>

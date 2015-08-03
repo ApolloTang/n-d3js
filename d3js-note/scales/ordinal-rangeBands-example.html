@@ -18,25 +18,33 @@
     <!-- HTML HERE -->
 
     <svg id="svg" style="width:300px; height:300px; border:1px lightgray solid;"></svg>
-    <canvas id="canvas" width="300" height="300" style="border:1px lightgray solid;"></canvas>
 
     <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
     <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
     <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
     <script>
-        var x = d3.scale.ordinal().rangeBands([0, 7])
-            .domain(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"])// 7 items
-        console.log(x("Sunday")); //0
-        console.log(x("Monday"));
-        console.log(x("Saturday")); // 6 , but where is 7 ?
+        var data = [ 'apple', 'banana','orange' ];
 
-        console.log('- - - - - - - - - - - - - - - - - -');
-        var x2 = d3.scale.ordinal()
-            .domain(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"])// 7 items
-            .rangePoints([1, 7]);
-        console.log(x2("Sunday")); //0
-        console.log(x2("Monday"));
-        console.log(x2("Saturday")); // 6 , but where is 7 ?
+        var indexes = _.map(data, function(item){
+            return _.indexOf(data, item);
+        })
+
+        var s = d3.scale.ordinal()
+            .domain(indexes)
+            .rangeRoundBands([0, 300], .50);
+
+        var log = function (d, i){var n = i; console.log(n, s(n), d)};
+        console.log('domain: ', s.domain())
+        console.log('range: ', s.rangeBand())
+        console.log('n, s(n), d')
+        d3.select('svg').append('g').selectAll('rect').data(data).enter()
+            .append('rect').each(log)
+            .attr('x', function(d,i) { return s(i); })
+            .attr('y', '0')
+            .attr('width', s.rangeBand())
+            .attr('height','300' )
+            .attr('fill', 'red')
+
     </script>
 </body>
 
