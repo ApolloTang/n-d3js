@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>D3: A bar chart that transitions to new data!</title>
+    <script type="text/javascript" src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <style type="text/css">
+        /* No style rules here yet */
+    </style>
+</head>
+
+<body>
+
+    <p>Click on this text to update the chart with new data values (once).</p>
+
+    <script type="text/javascript">
+
+        var datasetFlatten = function(_incomming) {
+            var out = [];
+            var flatten = function(_incomming) {
+                if (Object.prototype.toString.call(_incomming) === '[object Array]') {
+                    var l = _incomming.length;
+                    for (var i = 0; i < l; i++) {
+                        flatten(_incomming[i]);
+                    }
+                } else {
+                    out.push(_incomming)
+                }
+            }
+            flatten(_incomming);
+            return out;
+        };
+
+        //Width and height
+        var w = 600;
+        var h = 250;
+
+        var dataset = [
+            [5, 10, 13, 19, 21, 25, 22, 18, 15, 13, 11, 12, 15, 20, 18, 17, 16, 18, 23, 25],
+            [0, 10, 3, 9, 20, 15, 12, 8, 5, 23, 21, 22, 25, 20, 28, 7, 6, 8, 3, 5],
+        ];
+
+        var xScale = d3.scale.ordinal()
+            .domain(d3.range(dataset[0].length))
+            .rangeRoundBands([0, w], 0.05);
+
+        var yScale = d3.scale.linear()
+            .domain([0, d3.max(datasetFlatten(dataset))])
+            .range([0, h]);
+
+        var index = 0;
+        var data = dataset[index]
+
+        //Create SVG element
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        var onClickCallback = function() {
+            index = (index === 1) ? 0 : 1;
+            console.log(index);
+            data = dataset[index]
+
+            var point =svg.selectAll("rect").data(data)
+
+            // append if does not exist
+            point
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) { return xScale(i); })
+                .attr("y", function(d) { return h - yScale(d); })
+                .attr("width", xScale.rangeBand())
+                .attr("height", function(d) { return yScale(d); })
+                .attr("fill", 'blue')
+
+            // update and transision if exist
+            point
+                .transition() // <-- This makes it a smooth transition!
+                .attr("y", function(d) { return h - yScale(d); })
+                .attr("height", function(d) { return yScale(d); })
+                .attr("fill", 'blue')
+
+            // or remove if less data
+            point
+                .exit().remove();
+        };
+
+        d3.select("p").on("click", onClickCallback )
+
+    </script>
+</body>
+
+</html>
