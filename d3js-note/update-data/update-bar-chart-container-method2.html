@@ -118,7 +118,7 @@
             .attr("height", function(d) { return yScale(d.y[index]); });
 
         // remove --------
-        point = points.selectAll("a.data-point")
+        point = points.selectAll("g.data-point")
             .data(_dataset, function(d){ return d.id; })
             .exit().remove();
 
