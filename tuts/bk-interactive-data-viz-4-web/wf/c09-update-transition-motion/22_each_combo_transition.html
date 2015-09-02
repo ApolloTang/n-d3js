@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>D3: Using each() to start and end transitions</title>
+		<title>D3: Using each() to specify two transitions in sequence</title>
 		<script type="text/javascript" src="../d3/d3.v3.js"></script>
 		<style type="text/css">
 
@@ -120,8 +120,8 @@
 					   .duration(1000)
 					   .each("start", function() {
 						   d3.select(this)
-						     .attr("fill", "magenta")
-						     .attr("r", 5);
+						     .attr("fill", "red")
+						     .attr("r", 7);
 					   })
 					   .attr("cx", function(d) {
 					   		return xScale(d[0]);
@@ -131,8 +131,10 @@
 					   })
 					   .each("end", function() {
 						   d3.select(this)
+						     .transition()
+						     .duration(1000)
 						     .attr("fill", "green")
-						     .attr("r", 7);
+						     .attr("r", 2);
 					   });
 
 					//Update X axis

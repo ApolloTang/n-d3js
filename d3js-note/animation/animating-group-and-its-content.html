@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+</style>
+
+<body>
+    <svg width="400" height="400" style="border:1px solid black">
+        <g class="myGroup">
+            <circle r="5" class="red" transform="translate(10,10)" style="fill: red"></circle>
+            <circle r="5" class="green" transform="translate(10,20)" style="fill: green"></circle>
+        </g>
+    </svg>
+    <button>animating group and its content</button>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script src="http://localhost:8001/js/lib/moment-v2.10.3.js"></script>
+
+    <script>
+        d3.selectAll(".myGroup")
+            .transition("down")
+            .duration(600)
+            .attr("transform", "translate(10,60)")
+            .each('end', function() {
+
+                console.log(d3.select(this)[0][0].className.baseVal);
+                console.log(d3.select('.myGroup')[0][0].className.baseVal);
+                console.log(d3.select('.red')[0][0]);
+                console.log(d3.select('.green')[0][0]);
+
+                d3.select(this).select('.green')
+                    .transition("diagonal")
+                    .duration(600)
+                    .attr("transform", "translate(200,200)")
+                d3.select('.red')
+                    .transition("right")
+                    .duration(600)
+                    .attr("transform", "translate(200,60)")
+            });
+    </script>
+</body>
