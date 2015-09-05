@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+</style>
+
+<body>
+    <svg width="400" height="400" style="border:1px solid black">
+        <g class="myGroup">
+            <circle r="5" cx="20" cy="10" class="red" fill="red"></circle>
+            <circle r="5" cx="20" cy="20" class="green" fill="green"></circle>
+            <circle r="5" cx="20" cy="30" class="blue" fill="blue"></circle>
+            <circle r="5" cx="20" cy="40" class="magenta" fill="magenta"></circle>
+        </g>
+    </svg>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script src="http://localhost:8001/js/lib/moment-v2.10.3.js"></script>
+
+    <script>
+        // There are three 'main' transition (labeled: first, second, thrid)
+        // 'start' will overide main, although 'main' has been overided, its
+        //  duration is the delay for 'end'
+
+        var d = 2000;   // animation duration
+        var d_s = 1000; // shorter animation duration
+
+        var circles = d3.selectAll('circle');
+        var red = d3.select('.red');
+        var green = d3.select('.green');
+        var blue = d3.select('.blue');
+        d3.selectAll('circle')
+            .transition('first')
+            .each('start', function(){ red.transition().duration(d_s).attr('r', '10') })
+            .duration(d).attr("cx",300)  // cicles move right to top-right corner;
+            .each('end', function(){ red.transition().duration(d).attr('r', '5') })
+
+            .transition('second')
+            .each('start', function(){ green.transition().duration(d).attr('r', '10') })
+            .duration(d).attr("cy",300)  // circles move down to botton-right corner
+            .each('end', function(){ green.transition().duration(d).attr('r', '5') })
+
+            .transition('third')
+            .each('start', function(){ blue.transition().duration(d).attr('r', '10') })
+            .duration(d).attr("cx",10)  // circles move left to bottom-left corner
+            .each('end', function(){ blue.transition().duration(d).attr('r', '5') })
+
+    </script>
+</body>
