@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>02a transitions to new data</title>
+    <script type="text/javascript" src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script type="text/javascript" src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script type="text/javascript" src="http://localhost:8001/js/lib/moment-v2.10.3.js"></script>
+    <style type="text/css"> </style>
+</head>
+
+<body>
+    <button>update</button>
+
+    <p>Click on button to update the chart with new data values.</p>
+
+    <script type="text/javascript">
+
+    var i; // looping variable
+
+    var w = 200; var h = 100; // plotting area
+
+    // data
+    var dataset = [
+         { "date": "2015-07-14T00:00:00.000Z", "y": [10 , 100]}
+        ,{ "date": "2015-07-15T00:00:00.000Z", "y": [20 , 90 ]}
+        ,{ "date": "2015-07-16T00:00:00.000Z", "y": [30 , 80 ]}
+        ,{ "date": "2015-07-17T00:00:00.000Z", "y": [40 , 70 ]}
+        ,{ "date": "2015-07-18T00:00:00.000Z", "y": [50 , 60 ]}
+        ,{ "date": "2015-07-19T00:00:00.000Z", "y": [60 , 50 ]}
+        ,{ "date": "2015-07-20T00:00:00.000Z", "y": [70 , 40 ]}
+        ,{ "date": "2015-07-21T00:00:00.000Z", "y": [80 , 30 ]}
+        ,{ "date": "2015-07-22T00:00:00.000Z", "y": [90 , 20 ]}
+        ,{ "date": "2015-07-23T00:00:00.000Z", "y": [100, 10 ]}
+    ];
+    var dataLength = dataset[0].y.length;
+
+    // split dataset into two batches so it is updata able;
+    //      _dataset = [
+    //          [
+    //               { "date": "2015-07-14T00:00:00.000Z", "y": 100}
+    //              ,{ "date": "2015-07-15T00:00:00.000Z", "y": 90
+    //              , ...
+    //          ],
+    //          [
+    //               { "date": "2015-07-14T00:00:00.000Z", "y": 10}
+    //              ,{ "date": "2015-07-15T00:00:00.000Z", "y": 20}
+    //              , ...
+    //          ],
+    //      ];
+    var _dataset= [];
+    i = dataLength; do { _dataset.push(
+        _.map(dataset, function(item, index) {
+            return { id:index, date:new Date(item.date), y:item.y[i-1], }
+        })
+    ); } while (--i);
+
+    // flatten dataset so that maximum value can be calculated:
+    var dataY_flatten = [];
+    i = dataLength; do {
+        dataset.forEach(function(item){ dataY_flatten.push(item.y[i-1]); })
+    } while (--i);
+    var dataYmax = d3.max(dataY_flatten);
+
+    // prepare ordinate scale:
+    var yScale = d3.scale.linear().domain([0, dataYmax]).range([0, h]);
+
+    // prepare abscissa scale:
+    var bandWidth = w/(dataset.length);
+    var barWidth = bandWidth*0.75;
+    var dates = _.map(dataset, function(item, index){ return  new Date(item.date); });
+    var dateMax = d3.max(dates);
+    var dateMin = d3.min(dates);
+    var dateScale = d3.time.scale().domain([dateMin, dateMax]).range([0,w-barWidth]);
+
+    // prepare svg container
+    var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+
+    // prepare container for data collection
+    var points = svg.append("g").classed('points', true);
+
+    // first update -------------------------
+    var index = 0;
+    var point =points.selectAll("g")
+        .data(_dataset[index], function(d){return d.id; })
+        .enter()
+
+    var pointContainer = point
+        .append('g')
+        .classed('data-point', true)
+        .attr('transform', function(d){
+            var dataDate = d.date;
+            var dataX = parseInt(dateScale(dataDate), 10);
+            var x = dataX;
+            return "translate("+x+",0"+")";
+        })
+        .attr('data-id', function(d){return d.id})
+        .attr('data-x', function(d){return d.date})
+        .attr('data-y', function(d){ return d.y})
+        .attr('data-set', function(d){return 0});
+
+    pointContainer
+        .append('rect')
+        .attr("x", 0)
+        .attr("y", function(d) { return h - yScale(d.y); })
+        .attr("width", barWidth)
+        .attr("height", function(d) { return yScale(d.y); })
+        .attr("fill", 'blue');
+
+    // interactive callback
+    var onSwitchData = function() {
+        index = (index === 1) ? 0 : 1; // toggle data index
+
+        // subsequence update -------------------------
+        var pointContainer = points.selectAll("g.data-point")
+            .data( _dataset[index], function(d){ return d.id; })
+            .attr('transform', function(d){
+                var dataDate = d.date;
+                var dataX = parseInt(dateScale(dataDate), 10);
+                var x = dataX;
+                return "translate("+x+",0"+")";
+            })
+            .attr('data-id', function(d){return d.id})
+            .attr('data-x', function(d){ return d.date})
+            .attr('data-y', function(d){ return d.y})
+            .attr('data-set', function(d){return index});
+
+        pointContainer.select('rect')
+            .transition().duration(800)
+            .attr("y", function(d) { return h - yScale(d.y); })
+            .attr("height", function(d) { return yScale(d.y); });
+
+        pointContainer.exit().remove();
+    };
+
+        d3.select("button").on("click", onSwitchData )
+    </script>
+</body>
+
+</html>
