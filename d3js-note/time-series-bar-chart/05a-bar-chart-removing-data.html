@@ -179,7 +179,13 @@
                 return "translate("+x+",0"+")";
             });
 
-        pointContainer.exit().remove();
+        pointContainer.exit()
+            .transition().duration(800)
+            .attr('transform', function(d){
+                var x = -cs.barWidth;
+                return "translate("+x+",0"+")";
+            })
+            .remove();
 
         pointContainer.select('rect')
             .transition().duration(800)
