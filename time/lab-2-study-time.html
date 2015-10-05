@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>??Title??</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+        <style media="screen" type="text/css">
+
+        /* css here */
+
+        </style>
+    </head>
+    <body>
+
+        <!-- HTML HERE -->
+
+        <svg id="svg" style="width:300px; height:300px; border:1px lightgray solid;"></svg>
+        <canvas id="canvas" width="300" height="300" style="border:1px lightgray solid;"></canvas>
+
+        <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+        <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+        <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+        <script src="http://localhost:8001/js/lib/moment-v2.10.3.js"></script>
+        <script src="http://localhost:8001/js/lib/moment-timezone.js"></script>
+        <script>
+
+            var t = '2015-10-03';
+            console.log('[0] t                      : ', t)
+
+            console.log('- - - - - - - - - - - - - - - - - - - - ')
+
+            console.log('[1] moment(t)              : ', moment(t).toISOString()    , '          Sat Oct 03 04:00:00 America/Toronto' );
+            console.log('[2] moment.utc(t)          : ', moment.utc(t).toISOString(), '          Sat Oct 03 00:00:00 Europe/London'   );
+
+            console.log('- - - - - - - - - - - - - - - - - - - - ')
+
+            console.log('[a] moment(t).toDate()     : ', moment(t).toDate()     );
+            console.log('[b] moment.utc(t).toDate() : ', moment.utc(t).toDate() );
+            console.log('[c] new Date(t)            : ', new Date(t)            );
+
+
+            console.log('- - - - - - - - - - - - - - - - - - - - ')
+
+            console.log('moment(new Date(t)).toISOString()  : ', moment(new Date(t)).toISOString()    , '' );
+            console.log('moment(new Date(t)).toDate()  : ', moment(new Date(t)).toDate()    , '' );
+            console.log('moment(new Date(t)).toDate()  : ', moment(new Date(t)).toDate()    , '' );
+
+            console.log('- - - - - - - - - - - - - - - - - - - - ')
+
+            var D = new Date(t);
+            console.log('new Date("2015-10-03"): ', D);
+            console.log('new Date("2015-10-03"): ', D.toISOString() );
+
+        </script>
+        <comment>
+            [0] t                      :  2015-10-03
+            - - - - - - - - - - - - - - - - - - - -
+            [1] moment(t)              :  2015-10-03T04:00:00.000Z           implied location --> America/Toronto
+            [2] moment.utc(t)          :  2015-10-03T00:00:00.000Z           implied location --> Europe/London
+            - - - - - - - - - - - - - - - - - - - -
+            [a] moment(t).toDate()     :  Sat Oct 03 2015 00:00:00 GMT-0400 (EDT)
+            [b] moment.utc(t).toDate() :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
+            [c] new Date(t)            :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
+
+            ----------------------------------
+
+            Sat Oct3 0am in Toronto --> [moment(t)             ] --> Sat Oct3 4am in Toronto
+            Sat Oct3 0am in Toronto --> [moment(t).utc()       ] --> Sat Oct3 0am in London
+
+            Sat Oct3 0am in Toronto --> [moment(t).toDate()    ] --> Sat Oct3 12am in Toronto
+            Sat Oct3 0am in London  --> [moment(t).utc.toDate()] --> Fri Oct2  8pm in Toronto
+            Sat Oct3 0am in London  --> [new Date()            ] --> Fri Oct2 12pm in Toronto
+
+
+
+        </comment>
+
+    </body>
+</html>
