@@ -89,52 +89,53 @@
 
         var bar = d3.select('g.pt rect');
         var hasNoBar = bar.empty();
-        console.log('hasNoBar',  hasNoBar);
+
         var rect;
         var label;
         var h = 400;
+        var firstUpDateAnimationDuration = 1500;
+        var subSequenceUpDateAnimationDuration = 500;
 
         if (hasNoBar) {
+            console.log('hasNoBar', hasNoBar, '>> appending rect and then update ');
+
             pt.append('rect')
-            .attr('width', 10)
-            .attr('height', function(d,i){ return 0; })
-            .attr('transform', function(d, i){
-                var y = h; return 'translate('+0+','+y+')';
-            })
-            .attr( 'fill', function(d, i) { return d.c; })
-            .transition()
-            .duration(2000)
-            .attr('height', function(d,i){ return d.y; })
-            .attr('transform', function(d, i){
-                var y = h-d.y;
-                return 'translate('+0+','+y+')';
-            });
+                .attr('width', 10)
+                .attr('height', function(d,i){ return 0; })
+                .attr('transform', 'translate(0,'+h+')')
+                .attr('fill', function(d, i) { return d.c; })
+                // now we have a zero height bar we can transition the height to data value
+                .transition().duration(firstUpDateAnimationDuration)
+                .attr('height', function(d,i){ return d.y; })
+                .attr('transform', function(d, i){
+                    var y = h-d.y;
+                    return 'translate('+0+','+y+')';
+                });
 
             pt.append('text')
                 .text(function(d,i){return d.y})
+                .attr('transform', 'translate(0,'+h+')')
+                .transition().duration(firstUpDateAnimationDuration)
                 .attr('transform', function(d, i){
                     var y = h-d.y;
                     return 'translate('+0+','+y+')';
                 });
         } else {
-            console.log('update')
-            rect = d3.selectAll('.pt').select('rect')
-            console.log(rect)
-            rect.attr( 'fill', function(d, i) {
-                return d.c;
-                })
-            .transition()
-            .duration(500)
-            .attr('width', 10)
-            .attr('height', function(d,i){ return d.y; })
-            .attr('transform', function(d, i){
-                var y = h-d.y;
-                return 'translate('+0+','+y+')';
-            });
+            console.log('hasNoBar', hasNoBar, '>> dont append rect juat update viz with data value ');
 
-            label = d3.selectAll('.pt').select('text')
+            rect = d3.selectAll('.pt').select('rect');
+            rect.attr( 'fill', function(d, i) { return d.c; })
+                .transition().duration(subSequenceUpDateAnimationDuration)
+                .attr('width', 10)
+                .attr('height', function(d,i){ return d.y; })
+                .attr('transform', function(d, i){
+                    var y = h-d.y;
+                    return 'translate('+0+','+y+')';
+                });
+
+            label = d3.selectAll('.pt').select('text');
             label.text(function(d,i){return d.y})
-            .transition().duration(500)
+                .transition().duration(subSequenceUpDateAnimationDuration)
                 .attr('transform', function(d, i){
                     var y = h-d.y;
                     return 'translate('+0+','+y+')';
