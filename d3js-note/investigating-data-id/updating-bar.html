@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>enter-exit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        /* css here */
+    </style>
+</head>
+
+<body>
+    <svg width="1000" height="500">
+        <g></g>
+    </svg>
+
+<div>
+    <button id="a">1</button>
+    <button id="b">2</button>
+    <button id="c">3</button>
+</div>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script>
+
+    // data = [
+    //       [ {k:'1', x:'10',  y:'10'}, {k:'2', x:'20',  y:'20'}, {k:'3', x:'30', y:'30'}, {k:'y', x: '40', y:'50'}]
+    //     , [ {k:'4', x:'10',  y:'20'}, {k:'5', x:'20',  y:'30'}, {k:'6', x:'30', y:'10'}, {k:'y', x: '40', y:'10'}]
+    //     , [ {k:'7', x:'10',  y:'30'}, {k:'8', x:'20',  y:'10'}, {k:'9', x:'30', y:'30'}, {k:'y', x: '40', y:'30'}]
+    // ]
+    // data = [
+    //       [ {k:'1', x:'10',  y:'10', c:'red'},   {k:'2', x:'20',  y:'20', c:'green'}, {k:'3', x:'30', y:'30', c:'blue'}, {k:'y', x: '40', y:'50' , c:'black'}]
+    //     , [ {k:'1', x:'10',  y:'20', c:'green'}, {k:'2', x:'20',  y:'30', c:'blue'},  {k:'3', x:'30', y:'10', c:'red'} , {k:'y', x: '40', y:'10' , c:'black'}]
+    //     , [ {k:'1', x:'10',  y:'30', c:'blue'},  {k:'2', x:'20',  y:'10', c:'red'},   {k:'3', x:'30', y:'30', c:'green'}, {k:'y', x: '40', y:'30' , c:'black'}]
+    // ]
+    // data = [
+    //       [ {k:'1', x:'10',  y:'100', c:'red'},   {k:'2', x:'20',  y:'200', c:'green'}, {k:'3', x:'30', y:'300', c:'blue'} ]
+    //     , [ {k:'1', x:'10',  y:'200', c:'green'}, {k:'2', x:'20',  y:'300', c:'blue'},  {k:'3', x:'30', y:'100', c:'red'}  ]
+    //     , [ {k:'1', x:'10',  y:'300', c:'blue'},  {k:'2', x:'20',  y:'100', c:'red'},   {k:'3', x:'30', y:'200', c:'green'}]
+    // ]
+    data = [
+          [ {k:'1', x:'10',  y:'100', c:'red'  },   {k:'2', x:'20',  y:'200', c:'green'  },   {k:'3', x:'30', y:'300', c:'blue'  } ]
+        , [ {k:'1', x:'10',  y:'200', c:'red'},     {k:'2', x:'20',  y:'300', c:'green'},     {k:'3', x:'30', y:'100', c:'blue'}  ]
+        , [ {k:'1', x:'10',  y:'300', c:'red' },    {k:'2', x:'20',  y:'100', c:'green' },    {k:'3', x:'30', y:'200', c:'blue' }]
+    ]
+    // data = [
+    //       [ {k:'1', x:'10',  y:'10', c:'red'},   {k:'6', x:'20',  y:'20', c:'green'}, {k:'7', x:'30', y:'30', c:'blue'} ]
+    //     , [ {k:'2', x:'10',  y:'20', c:'green'}, {k:'5', x:'20',  y:'30', c:'blue'},  {k:'8', x:'30', y:'10', c:'red'}  ]
+    //     , [ {k:'3', x:'10',  y:'30', c:'blue'},  {k:'4', x:'20',  y:'10', c:'red'},   {k:'9', x:'30', y:'20', c:'green'}]
+    // ]
+    // data = [
+    //       [ {k:'1', x:'10',  y:'10', c:'red'},   {k:'1', x:'20',  y:'20', c:'green'}, {k:'1', x:'30', y:'30', c:'blue'} ]
+    //     , [ {k:'2', x:'10',  y:'20', c:'green'}, {k:'2', x:'20',  y:'30', c:'blue'},  {k:'2', x:'30', y:'10', c:'red'}  ]
+    //     , [ {k:'3', x:'10',  y:'30', c:'blue'},  {k:'3', x:'20',  y:'10', c:'red'},   {k:'3', x:'30', y:'20', c:'green'}]
+    // ]
+    var dataSet = 0;
+    $('#a').on('click', function() { update(0); })
+    $('#b').on('click', function() { update(1); })
+    $('#c').on('click', function() { update(2); })
+
+    var pts = d3.select('svg g');
+
+    function update(dataSet) {
+        var pt  = pts.selectAll('g').data(data[dataSet], function(d,i){
+            // var dataKey = d.k// ;
+            var dataKey = d.x// ;
+            // var dataKey = _.uniqueId();
+            console.log(i, d)
+            return dataKey;
+        });
+
+        pt.enter().append('g')
+            .classed('pt', true)
+            .attr('transform', function(d, i){
+            var x = d.x;
+            return 'translate('+x+','+0+')';
+        });
+
+        pt.exit().remove() ;
+
+        var bar = d3.select('g.pt rect');
+        var hasNoBar = bar.empty();
+        console.log('hasNoBar',  hasNoBar);
+        var rect;
+        var label;
+        var h = 400;
+
+        if (hasNoBar) {
+            pt.append('rect')
+            .attr( 'fill', function(d, i) {
+                return d.c;
+                })
+            // .transition()
+            // .duration(500)
+            .attr('width', 10)
+            .attr('height', function(d,i){
+                return d.y;
+                })
+            .attr('transform', function(d, i){
+                var y = h-d.y;
+                return 'translate('+0+','+y+')';
+            });
+            ;
+
+            pt.append('text')
+                .text(function(d,i){return d.y})
+                .attr('transform', function(d, i){
+                    var y = h-d.y;
+                    return 'translate('+0+','+y+')';
+                });
+        } else {
+            console.log('update')
+            rect = d3.selectAll('.pt').select('rect')
+            console.log(rect)
+            rect.attr( 'fill', function(d, i) {
+                return d.c;
+                })
+            .transition()
+            .duration(500)
+            .attr('width', 10)
+            .attr('height', function(d,i){ return d.y; })
+            .attr('transform', function(d, i){
+                var y = h-d.y;
+                return 'translate('+0+','+y+')';
+            });
+
+            ;
+
+            label = d3.selectAll('.pt').select('text')
+            label.text(function(d,i){return d.y})
+            .transition().duration(500)
+                .attr('transform', function(d, i){
+                    var y = h-d.y;
+                    return 'translate('+0+','+y+')';
+                });
+        }
+
+
+    }
+/*
+    var D3 = d3;
+
+    svg = D3.select('svg')
+
+    var pts1 = D3.select("tbody").selectAll("tr")
+    var pd1 = pts1.data(d1, function(d, i) {
+        var dataId =  (d) ? d.k : 'n/a';
+        console.log(1, d, i, dataId)
+        return dataId });
+    pd1.enter().append('tr').append('td').text(function(d){ return d.v});
+    pd1.exit().remove();
+
+    console.log('- - - - - - - - - - -')
+
+    var d2 = [ {k:'d', v:'4'}, {k:'e', v:'5'}, {k:'f', v:'6'},  {k:'y', v:'99999'}]
+    var pts2 = D3.select("tbody").selectAll("tr")
+    var pd2 = pts2.data(d2, function(d, i) {
+        var dataId =  (d) ? d.k : 'n/a';
+        console.log(2, d, i, dataId)
+        return dataId });
+    pd2.enter().append('tr').append('td').text(function(d){ return d.v });
+    pd2.exit().remove();
+
+    console.log('1 1 1 1 1 1 1 1 1 ')
+    debugger;
+
+    var d3 = [ {k:'g', v:'7'}, {k:'h', v:'8'}, {k:'i', v:'9'}, {k:'y', v:'666666'}]
+    var pts3 = D3.select("tbody").selectAll("tr")
+    var pd3 = pts3.data(d3, function(d, i) {
+        var dataId =  (d) ? d.k : 'n/a';
+        console.log(3, d, i, dataId)
+        return dataId });
+    pd3.enter().append('tr').append('td').text(function(d, i){
+            console.log('2222', d, i); return d.v });
+    pd3.exit().remove();
+    console.log('2 2 2 2 2 2 2 2 2 , did not update item k:y')
+    debugger;
+// NOTE above that although dataKey:'y' has different value: (3333,9999,66666) D3
+// will not update the DOM
+
+console.log('========================');
+
+    console.log('- - - - - - - - - - -');
+    D3.selectAll('tr').selectAll('td').each( function(d,i){ console.log('ee', d, i) }); // same index
+
+    console.log('- - - - - - - - - - -')
+    D3.selectAll('td').each( function(d,i){ console.log('ff', d, i) });
+// NOTE the above, that although, they both selecting td, the index are different.
+// never the less, there both target the same element (see below);
+// note that data bind to dome is 3333, not 9999,  not 6666!
+
+console.log('========================');
+
+    D3.selectAll('tr').selectAll('td').text('yyyy');
+    console.log('3 3 3 3 3 3 3 3 3')
+    debugger;
+
+    D3.selectAll('td').text('zzzzz');
+*/
+    </script>
+</body>
+
+</html>

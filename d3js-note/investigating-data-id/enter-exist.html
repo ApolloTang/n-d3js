@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>enter-exit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        /* css here */
+    </style>
+</head>
+
+<body>
+    <div id="d" ></div>
+    <table>
+        <tbody>
+        <tr><td>xx-0</td></tr>
+        <tr><td>xx-1</td></tr>
+        <tr><td>xx-2</td></tr>
+        <tr><td>xx-3</td></tr>
+        <tr><td>xx-4</td></tr>
+        <tr><td>xx-5</td></tr>
+        </tbody>
+    </table>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+    <script>
+
+
+    var D3 = d3;
+
+    var d1 = [ {k:'a', v:'1'}, {k:'b', v:'2'}, {k:'c', v:'3'},  {k:'y', v:'33333'}]
+    var pts1 = D3.select("tbody").selectAll("tr")
+    var pd1 = pts1.data(d1, function(d, i) {
+        var dataId =  (d) ? d.k : 'n/a';
+        console.log(1, d, i, dataId)
+        return dataId });
+    pd1.enter().append('tr').append('td').text(function(d){ return d.v});
+    pd1.exit().remove();
+
+    console.log('- - - - - - - - - - -')
+
+    var d2 = [ {k:'d', v:'4'}, {k:'e', v:'5'}, {k:'f', v:'6'},  {k:'y', v:'99999'}]
+    var pts2 = D3.select("tbody").selectAll("tr")
+    var pd2 = pts2.data(d2, function(d, i) {
+        var dataId =  (d) ? d.k : 'n/a';
+        console.log(2, d, i, dataId)
+        return dataId });
+    pd2.enter().append('tr').append('td').text(function(d){ return d.v });
+    pd2.exit().remove();
+
+    console.log('1 1 1 1 1 1 1 1 1 ')
+    debugger;
+
+    var d3 = [ {k:'g', v:'7'}, {k:'h', v:'8'}, {k:'i', v:'9'}, {k:'y', v:'666666'}]
+    var pts3 = D3.select("tbody").selectAll("tr")
+    var pd3 = pts3.data(d3, function(d, i) {
+        var dataId =  (d) ? d.k : 'n/a';
+        console.log(3, d, i, dataId)
+        return dataId });
+    pd3.enter().append('tr').append('td').text(function(d, i){
+            console.log('2222', d, i); return d.v });
+    pd3.exit().remove();
+    console.log('2 2 2 2 2 2 2 2 2 , did not update item k:y')
+    debugger;
+// NOTE above that although dataKey:'y' has different value: (3333,9999,66666) D3
+// will not update the DOM
+
+console.log('========================');
+
+    console.log('- - - - - - - - - - -');
+    D3.selectAll('tr').selectAll('td').each( function(d,i){ console.log('ee', d, i) }); // same index
+
+    console.log('- - - - - - - - - - -')
+    D3.selectAll('td').each( function(d,i){ console.log('ff', d, i) });
+// NOTE the above, that although, they both selecting td, the index are different.
+// never the less, there both target the same element (see below);
+// note that data bind to dome is 3333, not 9999,  not 6666!
+
+console.log('========================');
+
+    D3.selectAll('tr').selectAll('td').text('yyyy');
+    console.log('3 3 3 3 3 3 3 3 3')
+    debugger;
+
+    D3.selectAll('td').text('zzzzz');
+
+    </script>
+</body>
+
+</html>
