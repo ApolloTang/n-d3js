@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>update id | bar</title>
+    <title>updating-id | table</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
@@ -15,15 +15,24 @@
 </head>
 
 <body>
-    <svg width="100" height="400">
+    <table>
+        <tbody>
+        <tr><td>xx-0</td></tr>
+        <tr><td>xx-1</td></tr>
+        <tr><td>xx-2</td></tr>
+        <tr><td>xx-3</td></tr>
+        <tr><td>xx-4</td></tr>
+        <tr><td>xx-5</td></tr>
+        </tbody>
+    </table>
+    <div>
+        <button id="a">1</button>
+        <button id="b">2</button>
+        <button id="c">3</button>
+    </div>
+    <svg width="1000" height="500">
         <g></g>
     </svg>
-
-<div>
-    <button id="a">1</button>
-    <button id="b">2</button>
-    <button id="c">3</button>
-</div>
 
     <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
     <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
@@ -46,11 +55,10 @@
     //     , [ {k:'1', x:'10',  y:'300', c:'blue'},  {k:'2', x:'20',  y:'100', c:'red'},   {k:'3', x:'30', y:'200', c:'green'}]
     // ]
     data = [
-        , [ {k:'1', x:'10',  y:'100', c:'red'  },   {k:'2', x:'20',  y:'200', c:'green'  },   {k:'3', x:'30', y:'300', c:'blue'  } ]
+          [ {k:'1', x:'10',  y:'100', c:'red'  },   {k:'2', x:'20',  y:'200', c:'green'  },   {k:'3', x:'30', y:'300', c:'blue'  } ]
         , [ {k:'1', x:'10',  y:'200', c:'red'},     {k:'2', x:'20',  y:'300', c:'green'},     {k:'3', x:'30', y:'100', c:'blue'}  ]
         , [ {k:'1', x:'10',  y:'300', c:'red' },    {k:'2', x:'20',  y:'100', c:'green' },    {k:'3', x:'30', y:'200', c:'blue' }]
-    ];
-
+    ]
     // data = [
     //       [ {k:'1', x:'10',  y:'10', c:'red'},   {k:'6', x:'20',  y:'20', c:'green'}, {k:'7', x:'30', y:'30', c:'blue'} ]
     //     , [ {k:'2', x:'10',  y:'20', c:'green'}, {k:'5', x:'20',  y:'30', c:'blue'},  {k:'8', x:'30', y:'10', c:'red'}  ]
@@ -61,17 +69,15 @@
     //     , [ {k:'2', x:'10',  y:'20', c:'green'}, {k:'2', x:'20',  y:'30', c:'blue'},  {k:'2', x:'30', y:'10', c:'red'}  ]
     //     , [ {k:'3', x:'10',  y:'30', c:'blue'},  {k:'3', x:'20',  y:'10', c:'red'},   {k:'3', x:'30', y:'20', c:'green'}]
     // ]
+    var dataSet = 0;
+    $('#a').on('click', function() { update(0); })
+    $('#b').on('click', function() { update(1); })
+    $('#c').on('click', function() { update(2); })
 
-    $('#a').on('click', function() { update(1); })
-    $('#b').on('click', function() { update(2); })
-    $('#c').on('click', function() { update(3); })
-
-    var pts = d3.select('svg g').classed('pts', true);
-
-    update(1);
+    var pts = d3.select('table tbody');
 
     function update(dataSet) {
-        var pt  = pts.selectAll('g').data(data[dataSet], function(d,i){
+        var pt  = pts.selectAll('tr').data(data[dataSet], function(d,i){
             // var dataKey = (d) ? d.k : 'n/a';
             var dataKey = (d) ? d.x : 'n/a';
             // var dataKey = _.uniqueId();
@@ -79,68 +85,30 @@
             return dataKey;
         });
 
-        pt.enter().append('g').classed('pt', true)
-            .attr('transform', function(d, i){
-                var x = d.x;
-                return 'translate('+x+','+0+')';
-            });
-
+        pt.enter().append('tr').classed('pt', true)
         pt.exit().remove() ;
 
-        var bar = d3.select('g.pt rect');
-        var hasNoBar = bar.empty();
-        console.log('hasNoBar',  hasNoBar);
-        var rect;
-        var label;
-        var h = 400;
+        var firstTd = d3.select('tr.pt td');
+        var hasNoTd = firstTd.empty();
 
-        if (hasNoBar) {
-            pt.append('rect')
-            .attr('width', 10)
-            .attr('height', function(d,i){ return 0; })
-            .attr('transform', function(d, i){
-                var y = h; return 'translate('+0+','+y+')';
-            })
-            .attr( 'fill', function(d, i) { return d.c; })
-            .transition()
-            .duration(2000)
-            .attr('height', function(d,i){ return d.y; })
-            .attr('transform', function(d, i){
-                var y = h-d.y;
-                return 'translate('+0+','+y+')';
-            });
+        var td;
+        var content;
 
-            pt.append('text')
-                .text(function(d,i){return d.y})
-                .attr('transform', function(d, i){
-                    var y = h-d.y;
-                    return 'translate('+0+','+y+')';
-                });
+        if (hasNoTd) {
+            console.log('hasNoTd', hasNoTd, '>> appending and update td');
+            pt.append('td')
+            pt.append('text').text(function(d,i){return d.y})
         } else {
-            console.log('update')
-            rect = d3.selectAll('.pt').select('rect')
-            console.log(rect)
-            rect.attr( 'fill', function(d, i) {
-                return d.c;
-                })
-            .transition()
-            .duration(500)
-            .attr('width', 10)
-            .attr('height', function(d,i){ return d.y; })
-            .attr('transform', function(d, i){
-                var y = h-d.y;
-                return 'translate('+0+','+y+')';
-            });
+            console.log('hasNoTd', hasNoTd, '>> dont appdend, but only updating td');
+            rect = d3.selectAll('.pt').select('td')
 
-            label = d3.selectAll('.pt').select('text')
-            label.text(function(d,i){return d.y})
-            .transition().duration(500)
-                .attr('transform', function(d, i){
-                    var y = h-d.y;
-                    return 'translate('+0+','+y+')';
-                });
+            content = d3.selectAll('.pt').select('text')
+            content.text(function(d,i){return d.y})
         }
+
+
     }
+
 
     </script>
 </body>
