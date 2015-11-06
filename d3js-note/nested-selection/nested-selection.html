@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>nested-selection</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <ul class="parentNode_L1">
+    </ul>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script>
+        var matrix = [
+          ['a',  'b'],
+          ['c',  'd'],
+        ];
+
+        var parentNode_L1 = d3.select('.parentNode_L1');                      // dom node ul
+        debugger;
+
+        var previous_li = parentNode_L1.selectAll('li')               // nothing of length 0
+        debugger;
+
+        var joined      = previous_li.data(matrix, function(d){ return d;});  // nothing of length 2
+        debugger;
+
+        var entered    = joined.enter();                            // data array of 2 matrix rows
+        debugger;
+
+        var new_li = entered.append('li')
+        debugger;
+
+        var parentNode_L2 = new_li.append('ul').classed('parentNode_L2', true); // 2 dom node of nested ul
+        debugger;
+
+        var previous_lili = parentNode_L2.selectAll('li');            // nothing of length 0
+        debugger;
+
+        var joined2 = previous_lili.data(function(d){ return d }, function(d, i, j){ return d });  // nothing of length 0;
+        debugger;
+
+        var entered2 = joined2.enter();                          // data array of 2 matrix rows
+        debugger;
+
+        var new_lili = entered2.append('li').text(function(d){return d});
+        debugger;
+
+    </script>
+</body>
+
+</html>
