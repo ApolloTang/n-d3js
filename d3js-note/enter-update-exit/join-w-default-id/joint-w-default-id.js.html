@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>joint w default id</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        .h-bar {
+            min-height: 15px;
+            min-width: 10px;
+            background-color: steelblue;
+            margin-bottom: 2px;
+            font-size: 11px;
+            color: #f0f8ff;
+            text-align: right;
+            padding-right: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script type="text/javascript">
+        var data = [10, 11];
+
+        function render(data) {
+
+            var joined = d3.select("body").selectAll("div.h-bar")
+                .data(data, function(d, i) {
+                    console.log(d, i, this)
+                    return i;
+                })
+                // .data(data);
+
+            console.log('- - - - - - - - - - - - -')
+
+            joined.enter()
+                .append("div")
+                .attr("class", "h-bar")
+                .append("span");
+
+            d3.select("body").selectAll("div.h-bar")
+                .data(data)
+                .style("width", function(d) {
+                    return (d * 3) + "px";
+                })
+                .select("span")
+                .text(function(d) {
+                    return d;
+                });
+
+            d3.select("body").selectAll("div.h-bar")
+                .data(data)
+                .exit()
+                .remove();
+        }
+
+        var newData = 12;
+        var interval = setInterval(function() {
+            data.shift();
+            data.push(newData);
+            render(data);
+            // debugger;
+            if (newData == 14) {
+                clearInterval(interval)
+                console.log('stoped')
+            } else {
+                newData++;
+            }
+        }, 1500);
+    </script>
+
+</body>
+
+</html>
