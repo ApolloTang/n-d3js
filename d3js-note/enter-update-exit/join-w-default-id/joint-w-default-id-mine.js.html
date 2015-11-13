@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>2 joint w default id</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        .playground {
+            width: 100%;
+            border: red solid 1px;
+        }
+
+        div.bar {
+            width: 50px;
+            outline: blue solid 1px;
+            height: 50px;
+            margin: 0px 0px;
+            font-size: 11px;
+            color: #f0f8ff;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+<div class="playground"> </div>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script type="text/javascript">
+        var data = [1, 2];
+
+        function render(data) {
+            var bars = d3.select('div.playground').selectAll('div.bar');
+
+            // var joined = bars.data(data);                                 // [a]
+            var joined = bars.data(data, function(d, i) {return i;});  // [b]
+                                                                          // [a] and [b] are equivilant
+
+            var entered = joined.enter();
+
+            // var exited = joined.exit().remove();                       // in this example exit and remove never evoked
+
+            entered.append('div').classed('bar', true)
+                .style('width', function(d, i) { return (d*40) + 'px';   })
+                .style('background', function(d, i) { console.log('red'); return 'red'; });
+
+                // [Explaination]
+                // Enter will only apply during the first cycle. After first cycle, key is set to index i
+                // data and dom elements are joined. Enter will return nothing.
+
+            debugger;
+
+            // bars.style('width', function(d, i) { return (d*40) + 'px'; })
+            //     .style('background', function(d, i) {console.log('green'); return 'green';   });     // [x]
+            joined.style('width', function(d, i) { return (d*40) + 'px'; })
+                .style('background', function(d, i) { console.log('green');return 'green';   });  // [y]
+
+                // [Explaination]
+                // Using either [x] or [y], although they produce the same result at the end, they are not the same
+                // when you trace them step by step. With [x], green will NOT apply in the first cycle, because
+                // selection "bars" were made before data joined, so they reference to nothing in the first cycle.
+                // In [y], however, joined refer to same object in dom during the first cycle, so it will apply in
+                // the first cycle -- changing green to red
+        }
+
+        var cycle = 1
+        var newData = 3;
+        var interval = setInterval(function() {
+            render(data);
+            console.log('-------cycle '+cycle+' done -------------')
+            data.shift();
+            data.push(newData);
+            if (newData > 4) {  // with 4, a total of 3 cycle will run.
+                clearInterval(interval)
+            } else {
+                newData++;
+                cycle++
+            }
+        }, 500);
+    </script>
+
+</body>
+
+</html>
