@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>d3-enter-update-exit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        .playground {
+            width: 1000px;
+            height: 1000px;
+        }
+        rect {
+            width: 50px; height: 50px;
+        }
+        text {
+            font-size: 12px;
+            stroke: black;
+            fill: black;
+            stroke-width: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+    <svg class="playground"></svg>
+    <div class="msg"></div>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script>
+        var data = [
+            [ {id:'1', value:'red' },  {id:'2', value:'red'   }, {id:'3', value:'red'   }                                                 ],
+            [                          {id:'2', value:'green' }, {id:'3', value:'green' },  {id:'4', value:'green' }                        ],
+            [                                                    {id:'3', value:'blue'  },  {id:'4', value:'blue'  }, {id:'5', value: 'blue'} ]
+        ]
+
+        render(0);
+        setTimeout( function(){ render(1); }, 2000);
+        setTimeout( function(){ render(2); }, 6000);
+
+        function render(i) {
+            var dataSet = data[i];
+            var parent = d3.select('.playground');
+            var boxs = parent.selectAll('g');
+            var joined = boxs.data( dataSet, function(d){ return d.id; });
+
+
+            joined.each(function(d){
+                 var g = d3.select(this);
+                 g.select('rect')
+                 .transition().duration(500)
+                 .attr('fill', 'magenta');
+                })
+
+            var entered = joined.enter();
+            var enteredAppendGroup = entered.append('g')
+
+            enteredAppendGroup.attr('transform', function(d) {
+                    var x = 200;
+                    var y = d.id * 70;
+                    return 'translate('+x+','+y+')';
+                })
+                .transition().delay(1000).duration(500)
+                .attr('transform', function(d) {
+                    var x = 0;
+                    var y = d.id * 70;
+                    return 'translate('+x+','+y+')';
+                });
+
+            enteredAppendGroup.html(function(d){
+                var fill = d.value;
+                return '<rect x="0" y="0" fill="yellow" stroke="black"></rect> <text x="10" y="20">'+d.id+'</text>'
+            })
+
+            enteredAppendGroup.each(function(d){
+                var g = d3.select(this);
+                var rect = g.select('rect')
+                rect.transition().delay(1000).duration(500).attr('fill', d.value)
+                });
+
+            joined.each(function(d){
+                 d3.select(this).select('rect')
+                 .transition().delay(1000).duration(500).attr('fill', d.value);
+                })
+
+            var exit = joined.exit()
+
+            exit.each(function(d){
+                var g = d3.select(this);
+                var rect = g.select('rect')
+                rect.transition().duration(500).attr('fill', 'white').attr('stroke', 'black');
+                g.transition().delay(1000).duration(2000).attr('transform', function(d) {
+                        var x = 200;
+                        var y = d.id * 70;
+                        return 'translate('+x+','+y+')';
+                            }).each('end', function(){
+                                d3.select(this).remove();
+                            });
+           });
+        }
+
+
+    </script>
+</body>
+
+</html>

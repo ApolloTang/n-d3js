@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>d3-enter-update-exit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        .playground {
+            margin-top: 50px;
+        }
+        .box{
+            width: 50px; height: 50px;
+            border: 1px solid black;
+            margin: 10px;
+            color: white;
+            font-size: 2em;
+        }
+        .msg {
+            position: absolute;
+            bottom: 80px;
+            padding-left: 10px;
+            font-size: 14px;
+            line-height:1.5;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="playground"></div>
+    <div class="msg"></div>
+
+    <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script>
+        var data = [
+            [ {id:'a', value:'red' },  {id:'b', value:'red'   }, {id:'c', value:'red'   }                                                 ],
+            [                          {id:'b', value:'green' }, {id:'c', value:'green' },  {id:'d', value:'green' }                        ],
+            [                                                    {id:'c', value:'blue'  },  {id:'d', value:'blue'  }, {id:'e', value: 'blue'} ]
+        ]
+
+        render(0);
+        render(1);
+        render(2);
+
+        function render(i) {
+            var dataSet = data[i];
+
+            var parent = d3.select('.playground');
+
+            var boxs = parent.selectAll('div.box');
+
+            var joined = boxs.data( dataSet, function(d){ return d.id; });
+
+            joined.style('background', 'magenta');                                               if (i!== 0) {$('.msg').append('magenta = doms joined w new dataSet['+i+']<br\>'); debugger; }
+
+            var entered = joined.enter();
+
+            entered.append('div').classed('box', true);
+
+            joined.style('background', function(d){ var value = d.value; return d.value;  })
+                .text(function(d){return d.id});                                                $('.msg').append(dataSet[0].value + ' = doms updated w new dataSet['+i+']<br/>'); debugger;
+
+            var exist = joined.exit();
+
+            exist.style('background', 'white').style('color', 'black');                         if (i!==0) { $('.msg').append('white = doms to be exited <br/>'); debugger; }
+
+            exist.remove()
+        }
+
+
+    </script>
+</body>
+
+</html>
