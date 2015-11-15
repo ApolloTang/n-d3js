@@ -22,7 +22,10 @@
             fill: black;
             stroke-width: 1;
         }
-
+        g.blue text {
+            stroke: white;
+            fill: white;
+        }
     </style>
 </head>
 
@@ -35,6 +38,8 @@
     <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
 
     <script>
+        var delay1 = 2000;
+
         var data = [
             [ {id:'1', value:'red' },  {id:'2', value:'red'   }, {id:'3', value:'red'   }                                                 ],
             [                          {id:'2', value:'green' }, {id:'3', value:'green' },  {id:'4', value:'green' }                        ],
@@ -42,67 +47,61 @@
         ]
 
         render(0);
-        setTimeout( function(){ render(1); }, 2000);
-        setTimeout( function(){ render(2); }, 6000);
+        setTimeout( function(){ render(1); }, delay1*2  );
+        setTimeout( function(){ render(2); }, delay1*2*2 );
 
         function render(i) {
+            console.log('dataSet: ', i);
             var dataSet = data[i];
             var parent = d3.select('.playground');
             var boxs = parent.selectAll('g');
             var joined = boxs.data( dataSet, function(d){ return d.id; });
 
-
+            // joined before enter
             joined.each(function(d){
-                 var g = d3.select(this);
-                 g.select('rect')
-                 .transition().duration(500)
-                 .attr('fill', 'magenta');
-                })
+                 d3.select(this).select('rect')
+                     .transition().duration(delay1/2)
+                     .attr('fill', 'magenta');
+            });
 
             var entered = joined.enter();
             var enteredAppendGroup = entered.append('g')
 
-            enteredAppendGroup.attr('transform', function(d) {
+            enteredAppendGroup
+                .attr('transform', function(d) {
                     var x = 200;
                     var y = d.id * 70;
                     return 'translate('+x+','+y+')';
                 })
-                .transition().delay(1000).duration(500)
-                .attr('transform', function(d) {
+                .html(function(d){
+                    return '<rect x="0" y="0" fill="'+d.value+'" stroke="black"></rect> <text x="10" y="20">'+d.id+'</text>'
+                })
+                .transition().delay(delay1/2).duration(500).attr('transform', function(d) {
                     var x = 0;
                     var y = d.id * 70;
                     return 'translate('+x+','+y+')';
-                });
-
-            enteredAppendGroup.html(function(d){
-                var fill = d.value;
-                return '<rect x="0" y="0" fill="yellow" stroke="black"></rect> <text x="10" y="20">'+d.id+'</text>'
-            })
-
-            enteredAppendGroup.each(function(d){
-                var g = d3.select(this);
-                var rect = g.select('rect')
-                rect.transition().delay(1000).duration(500).attr('fill', d.value)
-                });
-
-            joined.each(function(d){
-                 d3.select(this).select('rect')
-                 .transition().delay(1000).duration(500).attr('fill', d.value);
                 })
+
+            // joined after enter
+            joined.each(function(d){
+                var g = d3.select(this).attr('class', d.value);
+                g.select('rect').transition().delay(delay1).duration(500).attr('fill', d.value);
+            });
 
             var exit = joined.exit()
 
             exit.each(function(d){
                 var g = d3.select(this);
                 var rect = g.select('rect')
-                rect.transition().duration(500).attr('fill', 'white').attr('stroke', 'black');
-                g.transition().delay(1000).duration(2000).attr('transform', function(d) {
-                        var x = 200;
-                        var y = d.id * 70;
-                        return 'translate('+x+','+y+')';
-                            }).each('end', function(){
-                                d3.select(this).remove();
-                            });
+                rect.transition().attr('fill', 'white').attr('stroke', 'black');
+                g.transition().delay(delay1).duration(500).attr('transform', function(d) {
+                    var x = 200;
+                    var y = d.id * 70;
+                    return 'translate('+x+','+y+')';
+                })
+                .each('end', function(){
+                    d3.select(this).remove();
+                });
            });
         }
 
