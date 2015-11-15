@@ -94,14 +94,12 @@
                 var g = d3.select(this);
                 var rect = g.select('rect')
                 rect.transition().attr('fill', 'white').attr('stroke', 'black');
-                g.transition().delay(delay1).duration(500).attr('transform', function(d) {
+                g.transition().delay(delay1*1.5).duration(500).attr('transform', function(d) {
                     var x = 200;
                     var y = d.id * 70;
                     return 'translate('+x+','+y+')';
                 })
-                .each('end', function(){
-                    d3.select(this).remove();
-                });
+                .each('end', function(){ d3.select(this).remove(); });
            });
         }
 
