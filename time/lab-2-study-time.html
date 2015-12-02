@@ -32,8 +32,8 @@
 
             console.log('- - - - - - - - - - - - - - - - - - - - ')
 
-            console.log('[1] moment(t)              : ', moment(t).toISOString()    , '          Sat Oct 03 04:00:00 America/Toronto' );
-            console.log('[2] moment.utc(t)          : ', moment.utc(t).toISOString(), '          Sat Oct 03 00:00:00 Europe/London'   );
+            console.log('[1] moment(t)              : ', moment(t).toISOString()    , '    imply Sat Oct 03 04:00:00 America/Toronto' );
+            console.log('[2] moment.utc(t)          : ', moment.utc(t).toISOString(), '    imply Sat Oct 03 00:00:00 Europe/London'   );
 
             console.log('- - - - - - - - - - - - - - - - - - - - ')
 
@@ -44,38 +44,33 @@
 
             console.log('- - - - - - - - - - - - - - - - - - - - ')
 
-            console.log('moment(new Date(t)).toISOString()  : ', moment(new Date(t)).toISOString()    , '' );
-            console.log('moment(new Date(t)).toDate()  : ', moment(new Date(t)).toDate()    , '' );
-            console.log('moment(new Date(t)).toDate()  : ', moment(new Date(t)).toDate()    , '' );
+            console.log('[d] moment(new Date(t)).toISOString()  : ', moment(new Date(t)).toISOString() );
+            console.log('[e] moment(new Date(t)).toDate()       : ', moment(new Date(t)).toDate()      );
+            console.log('[f] moment(new Date(t)).toDate()       : ', moment(new Date(t)).toDate()      );
 
             console.log('- - - - - - - - - - - - - - - - - - - - ')
 
             var D = new Date(t);
-            console.log('new Date("2015-10-03"): ', D);
-            console.log('new Date("2015-10-03"): ', D.toISOString() );
+            console.log('[g] new Date("2015-10-03")              : ', D);
+            console.log('[h] new Date("2015-10-03").toISOString(): ', D.toISOString() );
 
         </script>
         <comment>
             [0] t                      :  2015-10-03
             - - - - - - - - - - - - - - - - - - - -
-            [1] moment(t)              :  2015-10-03T04:00:00.000Z           implied location --> America/Toronto
-            [2] moment.utc(t)          :  2015-10-03T00:00:00.000Z           implied location --> Europe/London
+            [1] moment(t)              :  2015-10-03T04:00:00.000Z     imply Sat Oct 03 04:00:00 America/Toronto
+            [2] moment.utc(t)          :  2015-10-03T00:00:00.000Z     imply Sat Oct 03 00:00:00 Europe/London
             - - - - - - - - - - - - - - - - - - - -
             [a] moment(t).toDate()     :  Sat Oct 03 2015 00:00:00 GMT-0400 (EDT)
             [b] moment.utc(t).toDate() :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
             [c] new Date(t)            :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
-
-            ----------------------------------
-
-            Sat Oct3 0am in Toronto --> [moment(t)             ] --> Sat Oct3 4am in Toronto
-            Sat Oct3 0am in Toronto --> [moment(t).utc()       ] --> Sat Oct3 0am in London
-
-            Sat Oct3 0am in Toronto --> [moment(t).toDate()    ] --> Sat Oct3 12am in Toronto
-            Sat Oct3 0am in London  --> [moment(t).utc.toDate()] --> Fri Oct2  8pm in Toronto
-            Sat Oct3 0am in London  --> [new Date()            ] --> Fri Oct2 12pm in Toronto
-
-
-
+            - - - - - - - - - - - - - - - - - - - -
+            [d] moment(new Date(t)).toISOString()  :  2015-10-03T00:00:00.000Z
+            [e] moment(new Date(t)).toDate()       :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
+            [f] moment(new Date(t)).toDate()       :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
+            - - - - - - - - - - - - - - - - - - - -
+            [g] new Date("2015-10-03")              :  Fri Oct 02 2015 20:00:00 GMT-0400 (EDT)
+            [h] new Date("2015-10-03").toISOString():  2015-10-03T00:00:00.000Z
         </comment>
 
     </body>
