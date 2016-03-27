@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>??Title??</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+        <style media="screen" type="text/css">
+
+        /* css here */
+
+        </style>
+    </head>
+    <body>
+
+        <!-- HTML HERE -->
+
+        <svg id="svg" style="width:300px; height:300px; border:1px lightgray solid;"></svg>
+        <canvas id="canvas" width="300" height="300" style="border:1px lightgray solid;"></canvas>
+
+        <script src="http://localhost:8001/js/lib/lodash-v2.4.1.js"></script>
+        <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+        <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+        <script src="http://localhost:8001/js/lib/moment-v2.10.3.js"></script>
+        <script src="http://localhost:8001/js/lib/moment-timezone.js"></script>
+        <script>
+            // parameters
+            d = '2015-10-02';
+            t = d+'T00:00:00.000';
+            z = t+'z';
+            var d  = new Date(d);
+            var t = new Date(t);
+            var z = new Date(z);
+
+            console.log(d);    //Thu Oct 01 2015 20:00:00 GMT-0400 (EDT)
+            console.log(t);    //Thu Oct 01 2015 20:00:00 GMT-0400 (EDT)
+            console.log(z);    //Thu Oct 01 2015 20:00:00 GMT-0400 (EDT)
+                               // ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^
+                               //      GMT                    offSet
+
+            var smu = moment.utc("2015-10-03T00:00:00.000");
+
+            var sm = moment("2015-10-03T00:00:00.000");
+
+            var e = new Date("2015-10-03T00:00:00.000Z");
+
+
+            // console.log(smu.toDate());
+            //
+            // console.log(sm.toDate());
+
+            // var end   = new Date("2015-12-10T23:59:59.999Z");
+
+            // var timeScale = d3.time.scale()
+            //                 .domain([start, end])
+            //                 .range([0, 2400])
+            //
+            // console.log(timeScale.domain()[0].toISOString());
+            // console.log(timeScale.domain()[1].toISOString());
+            // console.log(timeScale.range());
+            //
+            // console.log('[1]- - - - - - - - - - ')
+            // // // console.log(d3.time.day.ceil(start).toISOString() );
+            // // console.log( d3.time.day.range(start, end).forEach( function(i, j){console.log(j+1, i.toISOString())}) );
+            // // console.log('[2]- - - - - - - - - - ')
+            // // console.log( d3.time.day.utc.range(start, end).forEach( function(i, j){console.log(j+1, i.toISOString())}) );
+            // // console.log('[3]- - - - - - - - - - ')
+            // // console.log( d3.time.day.offset(start, 1).toISOString());
+            //
+            // for (var i=1; i<50; i++) {
+            //     console.log(i, timeScale.ticks(d3.time.day, i).length)
+            // }
+
+        </script>
+        <comment>
+        </comment>
+
+    </body>
+</html>
