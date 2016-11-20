@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Inner and outer ticks on an axis</title>
+    <meta charset="utf-8" />
+</head>
+<style>
+    .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+</style>
+
+<body>
+<div id="chart"></div>
+  <p>An example of verticle lines extending from an x using innerTickSize and outerTickSize</p>
+</body>
+<footer>
+
+<script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+<script>
+
+// from http://bl.ocks.org/phil-pedruco/6579467
+var margin = {top: 10, right: 30, bottom: 30, left: 30},
+    width = 500 - margin.left - margin.right,
+    height =300 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([0, 25])
+    .range([0, width]);
+
+var data = [1, 2, 3, 5, 8, 13, 21];
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("top")
+    .tickValues(data)
+    .innerTickSize([100])
+    .outerTickSize([200])
+    .tickPadding(100);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+</script>
+</footer>
+
+</html>
