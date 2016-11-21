@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>d3-enter-update-exit</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://localhost:8001/css/lib/normalize-2.1.2.css">
+    <style media="screen" type="text/css">
+        /* css here */
+
+        li {list-style: none;
+              font-size: 20px;
+        }
+        li.selected{ color: #ff8888; }
+        li.updated{color: #88ff88;}
+        li.existed{color: #8888ff;}
+        li.enter{color: #88ffff;}
+    </style>
+</head>
+
+<body>
+    <ul id="list-1">
+        <li>hello</li>
+        <li>hello</li>
+        <li>hello</li>
+    </ul>
+
+    <script src="http://localhost:8001/js/lib/lodash-v4.17.0.js"></script>
+    <script src="http://localhost:8001/js/lib/jquery-1.11.0.js"></script>
+    <script src="http://localhost:8001/js/lib/d3-3.4.13.js"></script>
+
+    <script>
+    var o = d3.scale.ordinal()
+        .domain([1, 2])
+        .rangeBands([0, 100], 0, 0.5);
+
+    console.log(o.rangeBand())   // 33.3333
+    console.log(o.range())       // [16.666, 50]
+    console.log(o.rangeExtent()) // [0, 100]
+
+    //16.66666 |  33.3333 |    0   | 33.3333 | 16.6666
+    //      16.666      49.999    49.99    83.33
+
+    console.log('----------------------------');
+
+    var o1 = d3.scale.ordinal()
+        .domain([1, 2])
+        .rangeBands([0, 100], 0.5, 0.5);
+
+    console.log(o1.rangeBand())
+    console.log(o1.range())
+    console.log(o1.rangeExtent())
+
+    // 20 |  20 | 20 | 20 | 20
+    //    20    40  60    80
+    </script>
+</body>
+
+</html>
